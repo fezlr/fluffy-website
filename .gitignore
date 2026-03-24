@@ -7,7 +7,6 @@ build/
 
 ### Additional ###
 .env
-src/main/resources/application-local.yaml
 
 ### STS ###
 .apt_generated

@@ -1,3 +1,14 @@
 spring:
   application:
-    name: fluffy
+    name: ${APP_NAME}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update #change to VALIDATE if in production
+  docker:
+    compose:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
