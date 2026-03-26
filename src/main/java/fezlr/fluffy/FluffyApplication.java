@@ -7,5 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FluffyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FluffyApplication.class, args);
-	}
+    }
 }
