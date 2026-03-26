@@ -4,7 +4,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update #change to VALIDATE if in production
+      ddl-auto: create-drop #change to VALIDATE if in production
   docker:
     compose:
       enabled: true
