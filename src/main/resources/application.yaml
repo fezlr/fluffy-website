@@ -1,6 +1,7 @@
 spring:
   application:
     name: fluffy
+    base-url: http://localhost:8080
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -16,15 +17,21 @@ spring:
     expired-time-minutes: ${TOKEN_EXPIRED_TIME_MINUTES}
   mail:
     name: "Fluffy"
-    subject: "Confirm your email"
-    message: |
-      Thank you for registration. 
-      Your code:
-      %s
     host: smtp.gmail.com
     port: 587
     username: ${EMAIL_ADDRESS}
     password: ${EMAIL_PASSWORD}
+    code:
+      subject: "Confirm your email"
+      message: |
+        Thank you for registration. 
+        Your code:
+        %s
+    link:
+      subject: "Reset your password"
+      message: |
+        Reset your password:
+        %s/api/v1/auth/reset-password?token=%s
     properties:
       mail:
         smtp:
@@ -33,5 +40,7 @@ spring:
             enable: true
             required: true
   auth:
-    message: "A confirmation code has been sent to your email address. Please note that this code will expire in 15 minutes"
-                
+    create:
+      message: "A confirmation code has been sent to your email address. Please note that this code will expire in 15 minutes"
+    reset-password:
+      message: "A confirmation link has been sent to your email address. Please note that this code will expire in 15 minutes"

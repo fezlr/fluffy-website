@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class TokenService {
     private final TokenRepository tokenRepository;
 
     @Transactional
-    public TokenResponse save(UserEntity userEntity) {
-        log.info("Called save with BODY = {}", userEntity);
+    public TokenResponse saveCode(UserEntity userEntity) {
+        log.info("Called saveCode with BODY = {}", userEntity);
         String tokenCode = String.format("%06d", new SecureRandom().nextInt(999999));
         var tokenEntity = TokenEntity
                 .builder()
@@ -38,4 +39,20 @@ public class TokenService {
         tokenRepository.save(tokenEntity);
         return tokenMapper.toResponse(tokenEntity);
     }
+
+    @Transactional
+    public TokenResponse saveLink(UserEntity userEntity) {
+        log.info("Called saveLink with BODY = {}", userEntity);
+        var tokenEntity = TokenEntity
+                .builder()
+                .token(UUID.randomUUID().toString())
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(expiredPlusMinutes))
+                .user(userEntity)
+                .build();
+
+        tokenRepository.save(tokenEntity);
+        return tokenMapper.toResponse(tokenEntity);
+    }
+
 }
