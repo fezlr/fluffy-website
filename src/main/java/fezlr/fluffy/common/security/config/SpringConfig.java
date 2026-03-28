@@ -13,7 +13,7 @@ public class SpringConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
 
                 .authorizeHttpRequests(auth -> auth
@@ -22,6 +22,9 @@ public class SpringConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/favicon.ico"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/v1/auth/**"
                         ).permitAll()
                         .anyRequest().authenticated())
 
