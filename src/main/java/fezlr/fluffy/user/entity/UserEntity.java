@@ -16,18 +16,21 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    Long id;
+    private Long id;
 
     @Column(name = "email", unique = true)
-    String email;
+    private String email;
 
     @Column(name = "username", unique = true)
-    String username;
+    private String username;
 
     @Column(name = "password")
-    String password;
+    private String password;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    Role role;
+    private Role role;
+
+    @Column(name = "is_enabled")
+    private boolean enabled = false;
 }

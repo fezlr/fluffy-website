@@ -1,5 +1,6 @@
 package fezlr.fluffy.token.entity;
 
+import fezlr.fluffy.token.enums.TokenType;
 import fezlr.fluffy.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,21 +19,24 @@ public class TokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    Long id;
+    private Long id;
 
     @Column(name = "token", nullable = false)
-    String token;
+    private String token;
 
     @Column(name = "created_at", nullable = false)
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "expires_at", nullable = false)
-    LocalDateTime expiresAt;
+    private LocalDateTime expiresAt;
 
     @Column(name = "confirmed_at")
-    LocalDateTime confirmedAt;
+    private LocalDateTime confirmedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    UserEntity user;
+    private UserEntity user;
+
+    @Column(name = "type")
+    private TokenType tokenType;
 }

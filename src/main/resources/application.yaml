@@ -13,6 +13,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+  server:
+    servlet:
+      session:
+        timeout: 15m
   token:
     expired-time-minutes: ${TOKEN_EXPIRED_TIME_MINUTES}
   mail:
@@ -40,7 +44,12 @@ spring:
             enable: true
             required: true
   auth:
-    create:
-      message: "A confirmation code has been sent to your email address. Please note that this code will expire in 15 minutes"
+    code:
+      message: "A confirmation code has been sent to your email address. Please note that this code will expire in 15 minutes. Do not share this code"
+      validate-code-message: "Your account has been successfully activated"
     reset-password:
-      message: "A confirmation link has been sent to your email address. Please note that this code will expire in 15 minutes"
+      send-message: "A confirmation link has been sent to your email address. Please note that this code will expire in 15 minutes. Do not share this link"
+      message: "Your password has been successfully changed"
+      confirm-token:
+        message: "You can change the password"
+

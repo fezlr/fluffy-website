@@ -1,5 +1,6 @@
 package fezlr.fluffy.user.service;
 
+import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.enums.Role;
@@ -18,8 +19,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserEntity save(UserRequest userRequest) {
-        log.info("Called save with BODY = {}", userRequest);
+    public UserEntity create(UserRequest userRequest) {
+        log.info("Called create with BODY = {}", userRequest);
         var userEntity = UserEntity
                 .builder()
                 .username(userRequest.username())
@@ -30,5 +31,20 @@ public class UserService {
 
         userRepository.save(userEntity);
         return userEntity;
+    }
+
+    @Transactional
+    public UserEntity getUserByToken(TokenEntity tokenEntity) {
+        return tokenEntity.getUser();
+    }
+
+    @Transactional
+    public UserEntity save(UserEntity userEntity) {
+        return userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public void changePassword(UserEntity userEntity, String password) {
+        userEntity.setPassword(passwordEncoder.encode(password));
     }
 }
