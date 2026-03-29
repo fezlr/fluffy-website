@@ -14,6 +14,9 @@ public record UserResponse(
         String username,
 
         @NotBlank
-        Role role
+        Role role,
+
+        @NotBlank
+        boolean isEnabled
 ) {
 }

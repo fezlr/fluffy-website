@@ -30,8 +30,8 @@ public class SpringConfig {
 
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .failureForwardUrl("/login?error")
                         .defaultSuccessUrl("/home", true)
+                        .failureForwardUrl("/login?error")
                         .permitAll())
                 .logout(Customizer.withDefaults());
 

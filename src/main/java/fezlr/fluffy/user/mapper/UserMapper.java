@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     //TODO: builder
-    public UserEntity toEntity(UserRequest user, Role role) {
+    public UserEntity toEntity(UserRequest user, Role role, boolean isEnabled) {
         return new UserEntity(
                 null,
                 user.email(),
                 user.username(),
                 user.password(),
-                role
+                role,
+                isEnabled
         );
     }
 
@@ -25,7 +26,8 @@ public class UserMapper {
                 userEntity.getId(),
                 userEntity.getEmail(),
                 userEntity.getUsername(),
-                userEntity.getRole()
+                userEntity.getRole(),
+                userEntity.isEnabled()
         );
     }
 }
