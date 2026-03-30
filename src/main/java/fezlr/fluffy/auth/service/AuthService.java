@@ -5,7 +5,6 @@ import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
 import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
 import fezlr.fluffy.mail.service.MailService;
-import fezlr.fluffy.token.dto.response.TokenResponse;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.token.enums.TokenType;
 import fezlr.fluffy.token.service.TokenService;
@@ -44,8 +43,9 @@ public class AuthService {
     @Transactional
     public AuthResponse save(UserRequest userRequest) {
         UserEntity entity = userService.create(userRequest);
-        TokenResponse tokenResponse = tokenService.saveCode(entity, TokenType.CREATE_USER);
-        mailService.sendCode(userRequest.email(), tokenResponse.token());
+        TokenEntity tokenEntity = tokenService.createCode(entity, TokenType.CREATE_USER);
+        tokenService.save(tokenEntity);
+        mailService.sendCode(userRequest.email(), tokenEntity.getToken());
         return new AuthResponse(authMessage);
     }
 
@@ -59,8 +59,10 @@ public class AuthService {
             throw new IllegalArgumentException("User is not enabled");
         }
 
-        TokenResponse tokenResponse = tokenService.saveLink(entity, TokenType.RESET_PASSWORD);
-        mailService.sendLink(request.email(), tokenResponse.token());
+        TokenEntity tokenEntity = tokenService.createLink(entity, TokenType.RESET_PASSWORD);
+        tokenService.deactivateAllByUserAndTokenType(entity, TokenType.RESET_PASSWORD);
+        tokenService.save(tokenEntity);
+        mailService.sendLink(request.email(), tokenEntity.getToken());
         return new AuthResponse(resetPasswordSendMessage);
     }
 
@@ -79,12 +81,22 @@ public class AuthService {
         TokenEntity tokenEntity = tokenService.findByToken(token);
         UserEntity userEntity = userService.getUserByToken(tokenEntity);
 
-        if(!passwordEncoder.matches(request.newPassword(), userEntity.getPassword())) {
+        if(passwordEncoder.matches(request.newPassword(), userEntity.getPassword())) {
             throw new IllegalArgumentException("Password must be new");
         }
 
+        if(!userEntity.isEnabled()) {
+            throw new IllegalArgumentException("Account must be enabled");
+        }
+
+        if(!tokenEntity.isActive()) {
+            throw new IllegalArgumentException("Token must be active");
+        }
+
         userService.changePassword(userEntity, request.newPassword());
-        tokenService.confirmWithEntity(tokenEntity, token);
+        tokenService.deactivate(tokenEntity);
+        tokenService.confirm(tokenEntity);
+        tokenService.save(tokenEntity);
         userService.save(userEntity);
         return new AuthResponse(resetPasswordMessage);
     }
@@ -99,6 +111,9 @@ public class AuthService {
 
         UserEntity userEntity = userService.getUserByToken(tokenEntity);
         userEntity.setEnabled(true);
+        tokenService.deactivate(tokenEntity);
+        tokenService.confirm(tokenEntity);
+        tokenService.save(tokenEntity);
         userService.save(userEntity);
         return new AuthResponse(validateCodeMessage);
     }

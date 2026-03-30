@@ -1,5 +1,6 @@
 package fezlr.fluffy.token.dto.response;
 
+import fezlr.fluffy.token.enums.TokenType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +23,11 @@ public record TokenResponse(
         LocalDateTime confirmedAt,
 
         @NotNull
-        Long userId
+        Long userId,
+
+        @NotNull
+        TokenType tokenType,
+
+        boolean isActive
 ) {
 }
