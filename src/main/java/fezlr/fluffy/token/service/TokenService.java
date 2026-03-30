@@ -23,11 +23,10 @@ import java.util.UUID;
 public class TokenService {
     @Value("${spring.token.expired-time-minutes}")
     private Long expiredPlusMinutes;
-    private final TokenMapper tokenMapper;
     private final TokenRepository tokenRepository;
 
     @Transactional
-    public TokenResponse saveCode(UserEntity userEntity, TokenType tokenType) {
+    public TokenEntity createCode(UserEntity userEntity, TokenType tokenType) {
         log.info("Called saveCode with BODY = {}", userEntity);
         String tokenCode = String.format("%06d", new SecureRandom().nextInt(999999));
         var tokenEntity = TokenEntity
@@ -38,14 +37,12 @@ public class TokenService {
                 .user(userEntity)
                 .tokenType(TokenType.CREATE_USER)
                 .build();
-
-        tokenRepository.save(tokenEntity);
-        return tokenMapper.toResponse(tokenEntity);
+        return tokenEntity;
     }
 
     @Transactional
-    public TokenResponse saveLink(UserEntity userEntity, TokenType tokenType) {
-        log.info("Called saveLink with BODY = {}", userEntity);
+    public TokenEntity createLink(UserEntity userEntity, TokenType tokenType) {
+        log.info("Called createLink with BODY = {}", userEntity);
         var tokenEntity = TokenEntity
                 .builder()
                 .token(UUID.randomUUID().toString())
@@ -54,21 +51,16 @@ public class TokenService {
                 .user(userEntity)
                 .tokenType(tokenType)
                 .build();
-
-        tokenRepository.save(tokenEntity);
-        return tokenMapper.toResponse(tokenEntity);
-    }
-
-    @Transactional
-    public TokenResponse confirmWithEntity(TokenEntity entity, String token) {
-        entity.setConfirmedAt(LocalDateTime.now());
-        tokenRepository.save(entity);
-        return tokenMapper.toResponse(entity);
+        return tokenEntity;
     }
 
     @Transactional
     public TokenEntity validate(String token) {
         TokenEntity entity = findByToken(token);
+
+        if(!entity.isActive()) {
+            throw new IllegalArgumentException("Token is not active");
+        }
 
         if(entity.getExpiresAt().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Token is expired");
@@ -108,5 +100,25 @@ public class TokenService {
         return tokenRepository
                 .findByTokenAndUserEmail(token, email)
                 .orElseThrow(() -> new EntityNotFoundException("Entity or email not found"));
+    }
+
+    @Transactional
+    public void deactivate(TokenEntity tokenEntity) {
+        tokenEntity.setActive(false);
+    }
+
+    @Transactional
+    public void confirm(TokenEntity tokenEntity) {
+        tokenEntity.setConfirmedAt(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void deactivateAllByUserAndTokenType(UserEntity entity, TokenType tokenType) {
+        tokenRepository.deactivateAllByUserAndType(entity, tokenType);
+    }
+
+    @Transactional
+    public void save(TokenEntity tokenEntity) {
+        tokenRepository.save(tokenEntity);
     }
 }

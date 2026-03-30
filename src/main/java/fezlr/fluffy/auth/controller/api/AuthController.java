@@ -26,8 +26,12 @@ public class AuthController {
         return ResponseEntity.ok(authService.save(request));
     }
 
+    // TODO: split save logic and create
+    // POST sendCodeToken
+    // POST save
+
     // send link to an email
-    @PostMapping("/reset-password")
+    @PostMapping("/send-reset-password")
     public ResponseEntity<AuthResponse> sendResetPassword(@RequestBody @Valid SendResetPasswordRequest request) {
         log.info("Called sendResetPassword with BODY = {}", request);
         return ResponseEntity.ok(authService.sendResetPassword(request));

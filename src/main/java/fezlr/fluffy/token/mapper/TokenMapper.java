@@ -14,7 +14,9 @@ public class TokenMapper {
                 tokenEntity.getCreatedAt(),
                 tokenEntity.getExpiresAt(),
                 tokenEntity.getConfirmedAt(),
-                tokenEntity.getUser().getId()
+                tokenEntity.getUser().getId(),
+                tokenEntity.getTokenType(),
+                tokenEntity.isActive()
         );
     }
 }

@@ -31,6 +31,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Builder.Default
     @Column(name = "is_enabled")
     private boolean enabled = false;
 }

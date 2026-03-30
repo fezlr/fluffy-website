@@ -38,5 +38,10 @@ public class TokenEntity {
     private UserEntity user;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private TokenType tokenType;
+
+    @Builder.Default
+    @Column(name = "is_active")
+    private boolean isActive = true;
 }
