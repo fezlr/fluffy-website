@@ -1,12 +1,12 @@
 package fezlr.fluffy.common.exception;
 
-import java.time.LocalDateTime;
-
 public record ErrorResponseDto(
+        int status,
+
+        String error,
+
         String message,
 
-        String detailedMessage,
-
-        LocalDateTime errorLocalDateTime
+        String timestamp
 ) {
 }

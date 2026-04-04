@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Register</title>
+    <link th:href="@{/css/register.css}" rel="stylesheet">
 </head>
+
+<script th:src="@{/js/register.js}"></script>
+
 <body>
+<div class="register-container">
+    <div class="register-card">
 
-    <p>Register</p>
+        <div th:if="${param.error}" class="error-box">
+            <span th:if="${param.error[0] == '409'}">Email or Username is already taken</span>
+            <span th:if="${param.error[0] == '400'}">Password size must be 8 characters at least</span>
+        </div>
 
+        <h2>Create account</h2>
+
+        <form onsubmit="save(); return false;">
+            <input id="username" placeholder="Username" required>
+            <input id="email" placeholder="Email" required>
+            <input id="password" type="password" placeholder="Password" required>
+
+            <input type="hidden" id="csrfToken" th:value="${_csrf.token}">
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p class="hint">
+            Already have an account?
+            <a href="/login">Sign in</a>
+        </p>
+    </div>
+</div>
 </body>
 </html>
