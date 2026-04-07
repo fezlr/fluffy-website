@@ -1,12 +1,15 @@
 package fezlr.fluffy.auth.service;
 
 import fezlr.fluffy.auth.dto.request.CodeTokenRequest;
+import fezlr.fluffy.auth.dto.request.RegisterRequest;
 import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
 import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
+import fezlr.fluffy.auth.dto.response.RegisterResponse;
 import fezlr.fluffy.mail.service.MailService;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.token.enums.TokenType;
+import fezlr.fluffy.token.repository.TokenRepository;
 import fezlr.fluffy.token.service.TokenService;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.entity.UserEntity;
@@ -36,17 +39,30 @@ public class AuthService {
     private String validateCodeMessage;
     private final UserService userService;
     private final TokenService tokenService;
+    private final TokenRepository tokenRepository;
     private final MailService mailService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public AuthResponse save(UserRequest userRequest) {
+    public RegisterResponse save(RegisterRequest request) {
+
+        if(!request.password().equals(request.confirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        //TODO: make a method and move to UserService
+        UserRequest userRequest = new UserRequest(
+                request.email(),
+                request.username(),
+                request.password()
+        );
+
         UserEntity entity = userService.create(userRequest);
         TokenEntity tokenEntity = tokenService.createCode(entity, TokenType.CREATE_USER);
         tokenService.save(tokenEntity);
-        mailService.sendCode(userRequest.email(), tokenEntity.getToken());
-        return new AuthResponse(authMessage);
+        mailService.sendCode(request.email(), tokenEntity.getCode());
+        return new RegisterResponse(tokenEntity.getToken());
     }
 
     @Transactional
@@ -103,9 +119,19 @@ public class AuthService {
 
     @Transactional
     public AuthResponse validateCodeToken(CodeTokenRequest request) {
-        TokenEntity tokenEntity = tokenService.validate(request.code(), request.email());
+        //find email by uuid
+        var token = tokenRepository
+                .findByTokenWithUser(request.token())
+                .orElseThrow(() -> new EntityNotFoundException("Token not found"));
 
-        if(!tokenEntity.getToken().equals(request.code())) {
+        //TODO: refactor(optimize)
+        TokenEntity tokenEntity = tokenService.validate(request.token(), token.getUser().getEmail());
+
+        if(!tokenEntity.getCode().equals(request.code())) {
+            throw new IllegalArgumentException("Code is incorrect");
+        }
+
+        if(!tokenEntity.getToken().equals(request.token())) {
             throw new IllegalArgumentException("Token is incorrect");
         }
 

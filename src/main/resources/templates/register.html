@@ -12,6 +12,10 @@
 <div class="register-container">
     <div class="register-card">
 
+        <div id="error-box" style="display:none" class="error-box">
+            <span id="error-message"></span>
+        </div>
+
         <div th:if="${param.error}" class="error-box">
             <span th:if="${param.error[0] == '409'}">Email or Username is already taken</span>
             <span th:if="${param.error[0] == '400'}">Password size must be 8 characters at least</span>
@@ -23,10 +27,16 @@
             <input id="username" placeholder="Username" required>
             <input id="email" placeholder="Email" required>
             <input id="password" type="password" placeholder="Password" required>
-
-            <input type="hidden" id="csrfToken" th:value="${_csrf.token}">
+            <input id="confirmPassword" type="password" placeholder="Confirm password" required>
 
             <button type="submit">Register</button>
+        </form>
+
+        <form id="confirm-code-form" onsubmit="confirmCode(); return false;" style="display:none">
+            <p class="hint">Enter the 6-digit code sent to your email</p>
+            <input id="code" placeholder="000000" maxlength="6"
+                   inputmode="numeric" required autofocus>
+            <button type="submit">Confirm</button>
         </form>
 
         <p class="hint">
@@ -35,5 +45,6 @@
         </p>
     </div>
 </div>
+<input type="hidden" id="csrfToken" th:value="${_csrf?.token}">
 </body>
 </html>

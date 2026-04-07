@@ -1,9 +1,11 @@
 package fezlr.fluffy.auth.controller.api;
 
 import fezlr.fluffy.auth.dto.request.CodeTokenRequest;
+import fezlr.fluffy.auth.dto.request.RegisterRequest;
 import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
 import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
+import fezlr.fluffy.auth.dto.response.RegisterResponse;
 import fezlr.fluffy.auth.service.AuthService;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import jakarta.validation.Valid;
@@ -21,7 +23,7 @@ public class AuthController {
 
     //create a user and send email
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> save(@RequestBody @Valid UserRequest request) {
+    public ResponseEntity<RegisterResponse> save(@RequestBody @Valid RegisterRequest request) {
         log.info("Called create() with BODY = {}", request);
         return ResponseEntity.ok(authService.save(request));
     }

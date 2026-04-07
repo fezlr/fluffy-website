@@ -24,6 +24,9 @@ public class TokenEntity {
     @Column(name = "token", nullable = false)
     private String token;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

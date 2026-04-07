@@ -15,7 +15,7 @@ public record RegisterRequest(
 
         @NotBlank
         @Size(min = ValidationConstants.PASSWORD_SIZE_MIN, max = ValidationConstants.PASSWORD_SIZE_MAX)
-        String newPassword,
+        String password,
 
         @NotBlank
         @Size(min = ValidationConstants.PASSWORD_SIZE_MIN, max = ValidationConstants.PASSWORD_SIZE_MAX)
