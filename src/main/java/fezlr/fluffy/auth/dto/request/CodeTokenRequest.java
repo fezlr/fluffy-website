@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CodeTokenRequest(
         @NotBlank
-        String email,
+        String token,
 
         @NotBlank
         String code

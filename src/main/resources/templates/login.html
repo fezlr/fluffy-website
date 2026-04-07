@@ -14,13 +14,17 @@
             Invalid username or password
         </div>
 
+        <span th:if="${param.error != null and param.error[0] == 'disabled'}">
+            Please verify your email first
+        </span>
+
         <h2>Login</h2>
 
         <form method="post" action="/login">
             <input id="username" name="username" placeholder="Username" required>
             <input id="password" name="password" type="password" placeholder="Password" required>
 
-            <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
 
             <button type="submit">Sign in</button>
         </form>

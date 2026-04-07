@@ -31,7 +31,8 @@ public class TokenService {
         String tokenCode = String.format("%06d", new SecureRandom().nextInt(999999));
         var tokenEntity = TokenEntity
                 .builder()
-                .token(tokenCode)
+                .code(tokenCode)
+                .token(UUID.randomUUID().toString())
                 .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(expiredPlusMinutes))
                 .user(userEntity)

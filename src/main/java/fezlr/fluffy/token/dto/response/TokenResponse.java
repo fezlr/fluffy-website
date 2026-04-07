@@ -1,6 +1,7 @@
 package fezlr.fluffy.token.dto.response;
 
 import fezlr.fluffy.token.enums.TokenType;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,6 +13,9 @@ public record TokenResponse(
 
         @NotBlank
         String token,
+
+        @Nullable
+        String code,
 
         @NotNull
         LocalDateTime createdAt,

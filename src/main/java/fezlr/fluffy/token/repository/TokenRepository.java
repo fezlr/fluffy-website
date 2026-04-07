@@ -15,6 +15,9 @@ public interface TokenRepository extends JpaRepository<TokenEntity, Long> {
 
     Optional<TokenEntity> findByTokenAndUserEmail(String token, String email);
 
+    @Query("SELECT t FROM TokenEntity t JOIN FETCH t.user WHERE t.token = :token")
+    Optional<TokenEntity> findByTokenWithUser(String token);
+
     @Modifying
     @Transactional
     @Query("UPDATE TokenEntity t SET t.isActive = false WHERE t.user = :user AND t.tokenType = :tokenType")

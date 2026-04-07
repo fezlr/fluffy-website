@@ -11,6 +11,7 @@ public class TokenMapper {
         return new TokenResponse(
                 tokenEntity.getId(),
                 tokenEntity.getToken(),
+                tokenEntity.getCode(),
                 tokenEntity.getCreatedAt(),
                 tokenEntity.getExpiresAt(),
                 tokenEntity.getConfirmedAt(),
