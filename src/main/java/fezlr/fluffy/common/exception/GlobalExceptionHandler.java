@@ -14,7 +14,7 @@ import java.time.Instant;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handlerGeneralException(Exception e) {
+    public ResponseEntity<ErrorResponseDto> handleGeneralException(Exception e) {
         log.error("Called handlerGeneralException", e);
         var error = new ErrorResponseDto(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponseDto> handlerDataIntegrityException(Exception e) {
+    public ResponseEntity<ErrorResponseDto> handleDataIntegrityException(Exception e) {
         log.error("Called handlerDataIntegrityException", e);
         var error = new ErrorResponseDto(
                 HttpStatus.CONFLICT.value(),
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handlerEntityNotFoundException(Exception e) {
+    public ResponseEntity<ErrorResponseDto> handleEntityNotFoundException(Exception e) {
         log.error("Called handlerEntityNotFoundException", e);
         var error = new ErrorResponseDto(
                 HttpStatus.NOT_FOUND.value(),
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(exception = {IllegalArgumentException.class, IllegalStateException.class, MethodArgumentNotValidException.class})
-    public ResponseEntity<ErrorResponseDto> handlerBadRequest(Exception e) {
+    public ResponseEntity<ErrorResponseDto> handleBadRequest(Exception e) {
         log.error("Handler exception", e);
         var errorDto = new ErrorResponseDto(
                 HttpStatus.BAD_REQUEST.value(),

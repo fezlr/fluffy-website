@@ -1,11 +1,21 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
   application:
     name: fluffy
     base-url: http://localhost:8080
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop #change to VALIDATE if in production
+      ddl-auto: update
   docker:
     compose:
       enabled: true
@@ -23,19 +33,18 @@ spring:
     name: "Fluffy"
     host: smtp.gmail.com
     port: 587
-    username: ${EMAIL_ADDRESS}
+    address: ${EMAIL_ADDRESS}
     password: ${EMAIL_PASSWORD}
-    code:
-      subject: "Confirm your email"
-      message: |
+    messages:
+      code-subject-message: "Confirm your email"
+      code-message: |
         Thank you for registration. 
         Your code:
         %s
-    link:
-      subject: "Reset your password"
-      message: |
+      link-subject-message: "Reset your password"
+      link-message: |
         Reset your password:
-        %s/api/v1/auth/reset-password?token=%s
+        %s/reset-password?token=%s
     properties:
       mail:
         smtp:
@@ -44,12 +53,9 @@ spring:
             enable: true
             required: true
   auth:
-    code:
-      message: "A confirmation code has been sent to your email address. Please note that this code will expire in 15 minutes. Do not share this code"
-      validate-code-message: "Your account has been successfully activated"
-    reset-password:
-      send-message: "A confirmation link has been sent to your email address. Please note that this code will expire in 15 minutes. Do not share this link"
-      message: "Your password has been successfully changed"
-      confirm-token:
-        message: "You can change the password"
-
+    messages:
+      code-sent: "A confirmation code has been sent. It expires in 15 minutes — do not share it."
+      code-confirmed: "Your account has been successfully activated."
+      reset-sent: "A confirmation link has been sent. It expires in 15 minutes — do not share it."
+      reset-done: "Your password has been successfully changed."
+      reset-allowed: "You can now change your password."

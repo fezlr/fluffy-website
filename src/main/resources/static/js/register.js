@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-document.getElementById("error-box").style.display = "none";
-
 async function save() {
     const response = await fetch("/api/v1/auth/register", {
         method: "POST",
@@ -36,7 +34,8 @@ async function save() {
         document.getElementById("confirm-code-form").style.display = "block";
     } else {
         const error = await response.json();
-        window.location.href = `/register?error=${error.status}`;
+        console.log(error);
+        window.location.href = `/register?error=${encodeURIComponent(error.message)}`;
     }
 }
 
@@ -58,6 +57,7 @@ async function confirmCode() {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("verifyPending");
     } else {
+        document.getElementById("error-message").textContent = "Invalid or expired code";
         document.getElementById("error-box").style.display = "block";
     }
 }
