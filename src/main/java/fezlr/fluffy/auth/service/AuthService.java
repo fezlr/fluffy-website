@@ -1,5 +1,6 @@
 package fezlr.fluffy.auth.service;
 
+import fezlr.fluffy.auth.config.AuthPropertiesMessages;
 import fezlr.fluffy.auth.dto.request.CodeTokenRequest;
 import fezlr.fluffy.auth.dto.request.RegisterRequest;
 import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
@@ -18,7 +19,6 @@ import fezlr.fluffy.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class AuthService {
-    @Value("${spring.auth.code.message}")
-    private String authMessage;
-    @Value("${spring.auth.reset-password.send-message}")
-    private String resetPasswordSendMessage;
-    @Value("${spring.auth.reset-password.message}")
-    private String resetPasswordMessage;
-    @Value("${spring.auth.reset-password.confirm-token.message}")
-    private String resetPasswordConfirmTokenMessage;
-    @Value("${spring.auth.code.validate-code-message}")
-    private String validateCodeMessage;
+    private final AuthPropertiesMessages authPropertiesMessages;
     private final UserService userService;
     private final TokenService tokenService;
     private final TokenRepository tokenRepository;
@@ -79,13 +70,13 @@ public class AuthService {
         tokenService.deactivateAllByUserAndTokenType(entity, TokenType.RESET_PASSWORD);
         tokenService.save(tokenEntity);
         mailService.sendLink(request.email(), tokenEntity.getToken());
-        return new AuthResponse(resetPasswordSendMessage);
+        return new AuthResponse(authPropertiesMessages.resetSent());
     }
 
     @Transactional
     public AuthResponse validateResetPasswordToken(String token) {
         tokenService.validate(token);
-        return new AuthResponse(resetPasswordConfirmTokenMessage);
+        return new AuthResponse(authPropertiesMessages.resetAllowed());
     }
 
     @Transactional
@@ -114,7 +105,7 @@ public class AuthService {
         tokenService.confirm(tokenEntity);
         tokenService.save(tokenEntity);
         userService.save(userEntity);
-        return new AuthResponse(resetPasswordMessage);
+        return new AuthResponse(authPropertiesMessages.resetDone());
     }
 
     @Transactional
@@ -141,6 +132,6 @@ public class AuthService {
         tokenService.confirm(tokenEntity);
         tokenService.save(tokenEntity);
         userService.save(userEntity);
-        return new AuthResponse(validateCodeMessage);
+        return new AuthResponse(authPropertiesMessages.codeConfirmed());
     }
 }

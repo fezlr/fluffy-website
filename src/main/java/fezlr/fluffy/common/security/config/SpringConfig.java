@@ -20,10 +20,14 @@ public class SpringConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                )
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/favicon.ico").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/register/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/register/**", "/reset-password/**", "/reset-password-send-link/**", "/reset-password-complete/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

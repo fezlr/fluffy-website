@@ -7,7 +7,6 @@ import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
 import fezlr.fluffy.auth.dto.response.RegisterResponse;
 import fezlr.fluffy.auth.service.AuthService;
-import fezlr.fluffy.user.dto.request.UserRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,30 +31,30 @@ public class AuthController {
     // POST sendCodeToken
     // POST save
 
-    // send link to an email
+    //send link to an email
     @PostMapping("/send-reset-password")
     public ResponseEntity<AuthResponse> sendResetPassword(@RequestBody @Valid SendResetPasswordRequest request) {
         log.info("Called sendResetPassword with BODY = {}", request);
         return ResponseEntity.ok(authService.sendResetPassword(request));
     }
 
-    //when entering the page and getting token
-    @GetMapping("/confirm-token")
-    public ResponseEntity<AuthResponse> validateResetPasswordToken(@RequestParam String token) {
-        log.info("Called validateResetPasswordToken with BODY = {}", token);
-        return ResponseEntity.ok(authService.validateResetPasswordToken(token));
-    }
+//    //when entering the page and getting token
+//    @GetMapping("/confirm-token")
+//    public ResponseEntity<AuthResponse> validateResetPasswordToken(@RequestParam String token) {
+//        log.info("Called validateResetPasswordToken with BODY = {}", token);
+//        return ResponseEntity.ok(authService.validateResetPasswordToken(token));
+//    }
 
     //when enter new password in site
     @PatchMapping("/reset-password")
-    public ResponseEntity<AuthResponse> resetPassword(@RequestBody ResetPasswordRequest request, @RequestParam String token) {
+    public ResponseEntity<AuthResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         log.info("Called resetPassword with BODY = {}", request);
-        return ResponseEntity.ok(authService.resetPassword(request, token));
+        return ResponseEntity.ok(authService.resetPassword(request, request.token()));
     }
 
     //when enter 6-digit code
     @PostMapping("/confirm-code")
-    public ResponseEntity<AuthResponse> validateCodeToken(@RequestBody CodeTokenRequest request) {
+    public ResponseEntity<AuthResponse> validateCodeToken(@RequestBody @Valid CodeTokenRequest request) {
         log.info("Called validateCodeToken with BODY = {}", request);
         return ResponseEntity.ok(authService.validateCodeToken(request));
     }

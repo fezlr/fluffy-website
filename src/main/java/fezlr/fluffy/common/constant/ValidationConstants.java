@@ -1,4 +1,4 @@
-package fezlr.fluffy.common.constants;
+package fezlr.fluffy.common.constant;
 
 public class ValidationConstants {
     public static final int PASSWORD_SIZE_MIN = 8;

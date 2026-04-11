@@ -1,6 +1,6 @@
 package fezlr.fluffy.user.dto.request;
 
-import fezlr.fluffy.common.constants.ValidationConstants;
+import fezlr.fluffy.common.constant.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
