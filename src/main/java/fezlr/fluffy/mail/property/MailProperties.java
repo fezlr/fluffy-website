@@ -8,6 +8,6 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("spring.mail")
 public record MailProperties(
         @NotBlank String name,
-        @NotBlank String address
+        @NotBlank String username
 ) {
 }

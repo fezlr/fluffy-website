@@ -25,7 +25,7 @@ public class MailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setFrom("%s <%s>".formatted(mailProperties.name(), mailProperties.address()));
+            message.setFrom("%s <%s>".formatted(mailProperties.name(), mailProperties.username()));
             message.setSubject(mailPropertiesMessages.codeSubjectMessage());
             message.setText(mailPropertiesMessages.codeMessage().formatted(token));
             mailSender.send(message);
@@ -39,7 +39,7 @@ public class MailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setFrom("%s <%s>".formatted(mailProperties.name(), mailProperties.address()));
+            message.setFrom("%s <%s>".formatted(mailProperties.name(), mailProperties.username()));
             message.setSubject(mailPropertiesMessages.linkSubjectMessage());
             message.setText(mailPropertiesMessages.linkMessage().formatted(commonProperties.baseURL(), token));
             mailSender.send(message);
