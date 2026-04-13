@@ -1,5 +1,6 @@
 package fezlr.fluffy.common.security.config;
 
+import fezlr.fluffy.auth.oauth2.service.OAuthService;
 import fezlr.fluffy.auth.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,8 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
@@ -15,14 +18,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringConfig {
     private final UserDetailsServiceImpl userDetailsService;
+    private final OAuthService oAuthService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")
                         .defaultSuccessUrl("/home", true)
+                        .userInfoEndpoint(endpoint -> endpoint
+                                .userService(oAuthService))
                 )
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
@@ -31,6 +36,7 @@ public class SpringConfig {
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .failureHandler((request, response, exception) -> {
                             if (exception instanceof DisabledException) {
@@ -40,7 +46,12 @@ public class SpringConfig {
                             }
                         })
                         .permitAll())
-                .logout(Customizer.withDefaults())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll())
                 .userDetailsService(userDetailsService);
         return http.build();
     }

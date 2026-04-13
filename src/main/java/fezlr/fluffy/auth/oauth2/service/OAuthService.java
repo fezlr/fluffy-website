@@ -1,16 +1,56 @@
 package fezlr.fluffy.auth.oauth2.service;
 
+import fezlr.fluffy.auth.enums.Provider;
+import fezlr.fluffy.user.entity.UserEntity;
+import fezlr.fluffy.user.enums.Role;
+import fezlr.fluffy.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
+@RequiredArgsConstructor
 @Service
-public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class OAuthService extends DefaultOAuth2UserService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        return null;
+        OAuth2User oAuth2User = super.loadUser(userRequest);
+
+        String email = Optional.ofNullable(oAuth2User.<String>getAttribute("email"))
+                .orElseThrow(() -> new OAuth2AuthenticationException("Email not provided by Google"));
+
+        userRepository.findByEmail(email)
+                .ifPresentOrElse(
+                        existing -> {
+                            if (existing.getProvider() != Provider.GOOGLE) {
+                                throw new OAuth2AuthenticationException("Account is registered via " + existing.getProvider());
+                            }
+                        },
+                        () -> registerUser(email, oAuth2User.getAttribute("name"))
+                );
+
+        return oAuth2User;
+    }
+
+    //TODO: move to UserService
+    private void registerUser(String email, String name) {
+        var user = UserEntity.builder()
+                .email(email)
+                .password(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .username(name)
+                .provider(Provider.GOOGLE)
+                .role(Role.USER)
+                .enabled(true)
+                .build();
+        userRepository.save(user);
     }
 }

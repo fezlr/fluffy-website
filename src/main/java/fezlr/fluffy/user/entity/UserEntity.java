@@ -1,5 +1,6 @@
 package fezlr.fluffy.user.entity;
 
+import fezlr.fluffy.auth.enums.Provider;
 import fezlr.fluffy.user.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +31,10 @@ public class UserEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "provider")
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @Builder.Default
     @Column(name = "is_enabled")

@@ -1,5 +1,6 @@
 package fezlr.fluffy.user.service;
 
+import fezlr.fluffy.auth.enums.Provider;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.entity.UserEntity;
@@ -26,9 +27,9 @@ public class UserService {
                 .username(userRequest.username())
                 .email(userRequest.email())
                 .password(passwordEncoder.encode(userRequest.password()))
+                .provider(Provider.LOCAL)
                 .role(Role.USER)
                 .build();
-
         userRepository.save(userEntity);
         return userEntity;
     }
