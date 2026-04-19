@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomePageController {
     @GetMapping
     public String homeController() {
-        log.info("Called homeController");
-        return "home";
+        log.info("Called homeController()");
+        return "page/home";
     }
 }

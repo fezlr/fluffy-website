@@ -8,6 +8,8 @@ import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
 import fezlr.fluffy.auth.dto.response.RegisterResponse;
 import fezlr.fluffy.mail.service.MailService;
+import fezlr.fluffy.profile.entity.ProfileEntity;
+import fezlr.fluffy.profile.service.ProfileService;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.token.enums.TokenType;
 import fezlr.fluffy.token.repository.TokenRepository;
@@ -29,29 +31,33 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final AuthPropertiesMessages authPropertiesMessages;
     private final UserService userService;
+    private final ProfileService profileService;
     private final TokenService tokenService;
-    private final TokenRepository tokenRepository;
     private final MailService mailService;
+    private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public RegisterResponse save(RegisterRequest request) {
-
         if(!request.password().equals(request.confirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        //TODO: make a method and move to UserService
-        UserRequest userRequest = new UserRequest(
-                request.email(),
-                request.username(),
-                request.password()
-        );
+        //create
+        UserRequest userRequest = userService.createRequest(request);
+        UserEntity userEntity = userService.create(userRequest);
+        ProfileEntity profileEntity = profileService.create(userEntity);
 
-        UserEntity entity = userService.create(userRequest);
-        TokenEntity tokenEntity = tokenService.createCode(entity, TokenType.CREATE_USER);
+        //set
+        userEntity.setProfile(profileEntity);
+
+        TokenEntity tokenEntity = tokenService.createCode(userEntity, TokenType.CREATE_USER);
+
+        //save
+        userService.save(userEntity);
         tokenService.save(tokenEntity);
+
         mailService.sendCode(request.email(), tokenEntity.getCode());
         return new RegisterResponse(tokenEntity.getToken());
     }
@@ -86,7 +92,7 @@ public class AuthService {
         }
 
         TokenEntity tokenEntity = tokenService.findByToken(token);
-        UserEntity userEntity = userService.getUserByToken(tokenEntity);
+        UserEntity userEntity = userService.getByToken(tokenEntity);
 
         if(passwordEncoder.matches(request.newPassword(), userEntity.getPassword())) {
             throw new IllegalArgumentException("Password must be new");
@@ -111,7 +117,7 @@ public class AuthService {
     @Transactional
     public AuthResponse validateCodeToken(CodeTokenRequest request) {
         //find email by uuid
-        var token = tokenRepository
+        TokenEntity token = tokenRepository
                 .findByTokenWithUser(request.token())
                 .orElseThrow(() -> new EntityNotFoundException("Token not found"));
 
@@ -126,7 +132,7 @@ public class AuthService {
             throw new IllegalArgumentException("Token is incorrect");
         }
 
-        UserEntity userEntity = userService.getUserByToken(tokenEntity);
+        UserEntity userEntity = userService.getByToken(tokenEntity);
         userEntity.setEnabled(true);
         tokenService.deactivate(tokenEntity);
         tokenService.confirm(tokenEntity);

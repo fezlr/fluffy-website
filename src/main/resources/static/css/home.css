@@ -1,0 +1,97 @@
+.feed {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.post-compose {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #e8e8e8;
+}
+
+.compose-input {
+    width: 100%;
+    border: none;
+    resize: none;
+    font-size: 15px;
+    outline: none;
+    min-height: 80px;
+    color: #1a1a1a;
+}
+
+.compose-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f2f5;
+}
+
+.btn-post {
+    padding: 8px 20px;
+    background: #5b8def;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.btn-post:hover { background: #4a7be0; }
+
+.post-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #e8e8e8;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.post-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-author {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.post-date {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.post-text {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.empty-feed {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 60px 0;
+}

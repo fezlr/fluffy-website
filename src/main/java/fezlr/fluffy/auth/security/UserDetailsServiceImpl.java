@@ -1,5 +1,6 @@
 package fezlr.fluffy.auth.security;
 
+import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +15,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+        UserEntity user = userRepository
+                .findByUsernameOrEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username or email is not found"));
+
         return new UserDetailsImpl(user);
     }
 }

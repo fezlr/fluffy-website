@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@RequestMapping("/reset-password-complete")
 public class MessageResetPasswordController {
-    @GetMapping
+    @GetMapping("/reset-password-complete")
     public String messageResetPasswordPage() {
-        return "reset-password-complete";
+        return "auth/reset-password-complete";
     }
 }
