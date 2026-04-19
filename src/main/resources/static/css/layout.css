@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body { background: #f0f2f5; }
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: #fff;
+    border-right: 1px solid #e8e8e8;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #5b8def;
+    padding: 0 12px;
+    margin-bottom: 28px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #444;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background .15s, color .15s;
+}
+
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.nav-item:hover  { background: #f0f2f5; color: #5b8def; }
+.nav-item.active { background: #eef2fc; color: #5b8def; font-weight: 500; }
+
+.sidebar-footer { margin-top: auto; }
+
+.sidebar-footer form {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar-footer .nav-item.logout {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 15px;
+    color: #e74c3c;
+}
+
+.sidebar-footer .nav-item.logout:hover {
+    background: #fff0f0;
+    color: #e74c3c;
+}
+
+.nav-item.logout       { color: #e74c3c; }
+.nav-item.logout:hover { background: #fff0f0; color: #e74c3c; }
+
+.main-content {
+    margin-left: 220px;
+    flex: 1;
+    padding: 24px;
+}

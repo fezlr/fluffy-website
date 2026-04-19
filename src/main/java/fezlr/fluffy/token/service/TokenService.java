@@ -56,7 +56,7 @@ public class TokenService {
     }
 
     @Transactional
-    public TokenEntity validate(String token) {
+    public void validate(String token) {
         TokenEntity entity = findByToken(token);
 
         if(!entity.isActive()) {
@@ -70,8 +70,6 @@ public class TokenService {
         if(entity.getConfirmedAt() != null) {
             throw new IllegalArgumentException("Token is already used");
         }
-
-        return entity;
     }
 
     @Transactional

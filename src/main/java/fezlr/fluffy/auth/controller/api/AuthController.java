@@ -27,10 +27,6 @@ public class AuthController {
         return ResponseEntity.ok(authService.save(request));
     }
 
-    // TODO: split save logic and create
-    // POST sendCodeToken
-    // POST save
-
     //send link to an email
     @PostMapping("/send-reset-password")
     public ResponseEntity<AuthResponse> sendResetPassword(@RequestBody @Valid SendResetPasswordRequest request) {
@@ -38,21 +34,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.sendResetPassword(request));
     }
 
-//    //when entering the page and getting token
-//    @GetMapping("/confirm-token")
-//    public ResponseEntity<AuthResponse> validateResetPasswordToken(@RequestParam String token) {
-//        log.info("Called validateResetPasswordToken with BODY = {}", token);
-//        return ResponseEntity.ok(authService.validateResetPasswordToken(token));
-//    }
-
-    //when enter new password in site
+    //when put new password in site
     @PatchMapping("/reset-password")
     public ResponseEntity<AuthResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         log.info("Called resetPassword with BODY = {}", request);
         return ResponseEntity.ok(authService.resetPassword(request, request.token()));
     }
 
-    //when enter 6-digit code
+    //when put 6-digit code
     @PostMapping("/confirm-code")
     public ResponseEntity<AuthResponse> validateCodeToken(@RequestBody @Valid CodeTokenRequest request) {
         log.info("Called validateCodeToken with BODY = {}", request);

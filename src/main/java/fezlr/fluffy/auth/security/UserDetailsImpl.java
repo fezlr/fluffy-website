@@ -20,6 +20,10 @@ public class UserDetailsImpl implements UserDetails {
         );
     }
 
+    public UserEntity getUser() {
+        return userEntity;
+    }
+
     @Override
     public String getPassword() {
         return userEntity.getPassword();

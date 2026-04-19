@@ -1,0 +1,127 @@
+.friends-page { max-width: 860px; margin: 0 auto; }
+
+.friends-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.friends-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.friends-header .search-input {
+    width: 220px;
+    padding: 8px 14px;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #f0f2f5;
+}
+
+.friends-header .search-input:focus { border-color: #5b8def; background: #fff; }
+
+.friends-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid #e8e8e8;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color .2s, border-color .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tab.active { color: #5b8def; border-bottom-color: #5b8def; }
+.tab:hover  { color: #5b8def; }
+
+.badge {
+    background: #5b8def;
+    color: #fff;
+    font-size: 11px;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+.tab-content        { display: none; }
+.tab-content.active { display: block; }
+
+.friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.friend-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 16px;
+    border: 1px solid #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.friend-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.friend-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.friend-mutual {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+
+.friend-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-message, .btn-remove, .btn-accept {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.btn-message { background: #eef2fc; color: #5b8def; }
+.btn-message:hover { background: #dce8fb; }
+
+.btn-accept { background: #5b8def; color: #fff; }
+.btn-accept:hover { background: #4a7be0; }
+
+.btn-remove { background: #f0f2f5; color: #888; }
+.btn-remove:hover { background: #e4e6e9; }

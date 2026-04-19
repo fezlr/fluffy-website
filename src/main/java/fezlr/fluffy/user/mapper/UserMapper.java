@@ -1,6 +1,7 @@
 package fezlr.fluffy.user.mapper;
 
 import fezlr.fluffy.auth.enums.Provider;
+import fezlr.fluffy.profile.entity.ProfileEntity;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.dto.response.UserResponse;
 import fezlr.fluffy.user.entity.UserEntity;
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
     //TODO: builder
-    public UserEntity toEntity(UserRequest user, Role role, Provider provider, boolean isEnabled) {
+    public UserEntity toEntity(UserRequest user, ProfileEntity profileEntity, Role role, Provider provider, boolean isEnabled) {
         return new UserEntity(
                 null,
+                profileEntity,
                 user.email(),
                 user.username(),
                 user.password(),

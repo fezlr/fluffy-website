@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: layout(~{::content}, ~{::extraHead}, ~{::extraScript})}">
+
+<th:block th:fragment="extraHead">
+    <link th:href="@{/css/messages.css}" rel="stylesheet">
+</th:block>
+
+<th:block th:fragment="content">
+    <div class="messages-layout">
+
+        <div class="chats-list">
+            <div class="chats-header">
+                <h2>Messages</h2>
+                <input type="text" class="search-input" placeholder="Search...">
+            </div>
+
+            <div class="chat-item active">
+                <img src="https://i.pravatar.cc/40?img=1" class="chat-avatar" alt="">
+                <div class="chat-info">
+                    <span class="chat-name">John Doe</span>
+                    <span class="chat-preview">Hey, how are you?</span>
+                </div>
+                <span class="chat-time">12:30</span>
+            </div>
+
+            <div class="chat-item">
+                <img src="https://i.pravatar.cc/40?img=2" class="chat-avatar" alt="">
+                <div class="chat-info">
+                    <span class="chat-name">Jane Smith</span>
+                    <span class="chat-preview">See you tomorrow!</span>
+                </div>
+                <span class="chat-time">11:15</span>
+            </div>
+
+            <div class="chat-item">
+                <img src="https://i.pravatar.cc/40?img=3" class="chat-avatar" alt="">
+                <div class="chat-info">
+                    <span class="chat-name">Mike Johnson</span>
+                    <span class="chat-preview">Thanks!</span>
+                </div>
+                <span class="chat-time">Yesterday</span>
+            </div>
+        </div>
+
+        <div class="chat-window">
+            <div class="chat-window-header">
+                <img src="https://i.pravatar.cc/40?img=1" class="chat-avatar" alt="">
+                <span class="chat-name">John Doe</span>
+            </div>
+
+            <div class="chat-messages">
+                <div class="message incoming">
+                    <img src="https://i.pravatar.cc/32?img=1" class="msg-avatar" alt="">
+                    <div class="msg-bubble">Hey, how are you?</div>
+                </div>
+                <div class="message outgoing">
+                    <div class="msg-bubble">I'm good, thanks!</div>
+                </div>
+                <div class="message incoming">
+                    <img src="https://i.pravatar.cc/32?img=1" class="msg-avatar" alt="">
+                    <div class="msg-bubble">What are you up to?</div>
+                </div>
+            </div>
+
+            <div class="chat-input-bar">
+                <input type="text" class="chat-input" placeholder="Write a message...">
+                <button class="btn-send">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block th:fragment="extraScript">
+    <script th:src="@{/js/messages.js}"></script>
+</th:block>
+
+</html>

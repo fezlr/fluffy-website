@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: layout(~{::content}, ~{::extraHead}, ~{::extraScript})}">
+
+<th:block th:fragment="extraHead">
+    <link th:href="@{/css/friends.css}" rel="stylesheet">
+</th:block>
+
+<th:block th:fragment="content">
+    <div class="friends-page">
+
+        <div class="friends-header">
+            <h2>Friends</h2>
+            <input type="text" class="search-input" placeholder="Search people...">
+        </div>
+
+        <div class="friends-tabs">
+            <button class="tab active" data-tab="all">All friends</button>
+            <button class="tab" data-tab="requests">Requests <span class="badge">3</span></button>
+            <button class="tab" data-tab="suggestions">Suggestions</button>
+        </div>
+
+        <div class="tab-content active" id="tab-all">
+            <div class="friends-grid">
+                <div class="friend-card">
+                    <img src="https://i.pravatar.cc/80?img=1" class="friend-avatar" alt="">
+                    <div class="friend-name">John Doe</div>
+                    <div class="friend-mutual">5 mutual friends</div>
+                    <div class="friend-actions">
+                        <button class="btn-message">Message</button>
+                        <button class="btn-remove">Remove</button>
+                    </div>
+                </div>
+                <div class="friend-card">
+                    <img src="https://i.pravatar.cc/80?img=2" class="friend-avatar" alt="">
+                    <div class="friend-name">Jane Smith</div>
+                    <div class="friend-mutual">2 mutual friends</div>
+                    <div class="friend-actions">
+                        <button class="btn-message">Message</button>
+                        <button class="btn-remove">Remove</button>
+                    </div>
+                </div>
+                <div class="friend-card">
+                    <img src="https://i.pravatar.cc/80?img=3" class="friend-avatar" alt="">
+                    <div class="friend-name">Mike Johnson</div>
+                    <div class="friend-mutual">8 mutual friends</div>
+                    <div class="friend-actions">
+                        <button class="btn-message">Message</button>
+                        <button class="btn-remove">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-requests">
+            <div class="friends-grid">
+                <div class="friend-card">
+                    <img src="https://i.pravatar.cc/80?img=4" class="friend-avatar" alt="">
+                    <div class="friend-name">Alice Brown</div>
+                    <div class="friend-mutual">1 mutual friend</div>
+                    <div class="friend-actions">
+                        <button class="btn-accept">Accept</button>
+                        <button class="btn-remove">Decline</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab-suggestions">
+            <div class="friends-grid">
+                <div class="friend-card">
+                    <img src="https://i.pravatar.cc/80?img=5" class="friend-avatar" alt="">
+                    <div class="friend-name">Bob Wilson</div>
+                    <div class="friend-mutual">3 mutual friends</div>
+                    <div class="friend-actions">
+                        <button class="btn-accept">Add friend</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block th:fragment="extraScript">
+    <script th:src="@{/js/friends.js}"></script>
+</th:block>
+
+</html>

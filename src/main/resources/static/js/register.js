@@ -53,9 +53,9 @@ async function confirmCode() {
     });
 
     if (response.ok) {
-        window.location.href = "/login";
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("verifyPending");
+        window.location.href = "/login";
     } else {
         document.getElementById("error-message").textContent = "Invalid or expired code";
         document.getElementById("error-box").style.display = "block";

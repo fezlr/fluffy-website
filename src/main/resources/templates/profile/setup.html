@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setup Profile</title>
+    <link th:href="@{/css/setup.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="card">
+    <div class="title">What's your name?</div>
+    <div class="subtitle">This will be displayed on your profile</div>
+
+    <form method="post" th:action="@{/profile/setup}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <div class="field">
+            <label>First name</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Name">
+            <div class="field-error" id="firstName-error">Please enter your first name</div>
+        </div>
+
+        <div class="field">
+            <label>Last name</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+            <div class="field-error" id="lastName-error">Please enter your last name</div>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">Continue</button>
+    </form>
+
+    <input type="hidden" id="csrf" th:value="${_csrf.token}">
+
+    <div id="error-box" style="display:none" class="field-error visible">
+        Something went wrong. Please try again.
+    </div>
+</div>
+
+<script th:src="@{/js/setup.js}"></script>
+</body>
+</html>

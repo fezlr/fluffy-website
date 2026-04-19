@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@RequestMapping("/register")
 public class RegisterPageController {
-    @GetMapping
+    @GetMapping("/register")
     public String registerPage() {
-        return "register";
+        return "auth/register";
     }
 }

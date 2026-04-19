@@ -1,5 +1,6 @@
 package fezlr.fluffy.user.service;
 
+import fezlr.fluffy.auth.dto.request.RegisterRequest;
 import fezlr.fluffy.auth.enums.Provider;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.user.dto.request.UserRequest;
@@ -8,6 +9,7 @@ import fezlr.fluffy.user.enums.Role;
 import fezlr.fluffy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +32,11 @@ public class UserService {
                 .provider(Provider.LOCAL)
                 .role(Role.USER)
                 .build();
-        userRepository.save(userEntity);
         return userEntity;
     }
 
     @Transactional
-    public UserEntity getUserByToken(TokenEntity tokenEntity) {
+    public UserEntity getByToken(TokenEntity tokenEntity) {
         return tokenEntity.getUser();
     }
 
@@ -47,5 +48,13 @@ public class UserService {
     @Transactional
     public void changePassword(UserEntity userEntity, String password) {
         userEntity.setPassword(passwordEncoder.encode(password));
+    }
+
+    public UserRequest createRequest(RegisterRequest request) {
+        return new UserRequest(
+                request.email(),
+                request.username(),
+                request.password()
+        );
     }
 }
