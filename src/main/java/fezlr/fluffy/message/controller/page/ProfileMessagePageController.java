@@ -1,4 +1,4 @@
-package fezlr.fluffy.profile.controller.page;
+package fezlr.fluffy.message.controller.page;
 
 import fezlr.fluffy.common.service.CustomAuthService;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/profile/friends")
-public class ProfileFriendsPageController {
+@RequestMapping("/profile/messages")
+public class ProfileMessagePageController {
     private final CustomAuthService customAuthService;
 
     @GetMapping
-    public String profileFriends(Model model) {
-        log.info("Called profileFriends");
+    public String profileMessages(Model model) {
+        log.info("Called profileMessages");
         model.addAttribute("profile", customAuthService.getCurrentUser().getProfile());
-        return "profile/friends";
+        return "profile/messages";
     }
 }

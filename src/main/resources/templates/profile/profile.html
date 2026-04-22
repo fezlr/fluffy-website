@@ -18,7 +18,7 @@
             <div class="cover-img"></div>
             <div class="profile-avatar-wrap">
                 <img class="profile-avatar"
-                     th:src="${profile.mainPhotoUrl != null} ? ${profile.mainPhotoUrl} : '/images/default-avatar.png'"
+                     th:src="${profile.mainPhotoUrl != null ? profile.mainPhotoUrl : '/images/default-avatar.png'}"
                      alt="avatar">
             </div>
         </div>
@@ -26,16 +26,24 @@
         <div class="profile-info">
             <div class="profile-name-row">
                 <div>
-                    <h1 class="profile-name" th:text="${profile.firstName + ' ' + profile.lastName}"></h1>
-                    <span class="profile-username" th:text="'@' + ${user.username}"></span>
+                    <h1 class="profile-name"
+                        th:text="${profile.firstName + ' ' + profile.lastName}"></h1>
+                    <span class="profile-username"
+                          th:text="'@' + ${user.username}"></span>
                 </div>
+
                 <div class="profile-actions">
-                    <button th:if="${isOwnProfile}" class="btn-edit" onclick="window.location.href='/profile/edit'">
+                    <button th:if="${isOwnProfile}"
+                            class="btn-edit"
+                            onclick="window.location.href='/profile/settings'">
                         Edit profile
                     </button>
-                    <button th:unless="${isOwnProfile}" class="btn-follow" id="follow-btn"
-                            th:data-id="${user.id}"
-                            th:text="${isFollowing} ? 'Following' : 'Follow'">
+
+                    <button th:unless="${isOwnProfile}"
+                            class="btn-follow"
+                            id="follow-btn"
+                            th:data-id="${user.id}">
+                        Follow
                     </button>
                 </div>
             </div>
@@ -63,14 +71,17 @@
 
         <div class="tab-content active" id="tab-posts">
             <div class="posts-grid">
+
                 <div th:each="post : ${posts}" class="post-card">
                     <div class="post-header">
                         <img class="post-avatar"
-                             th:src="${profile.mainPhotoUrl != null} ? ${profile.mainPhotoUrl} : '/images/default-avatar.png'"
+                             th:src="${profile.mainPhotoUrl != null ? profile.mainPhotoUrl : '/images/default-avatar.png'}"
                              alt="">
                         <div>
-                            <div class="post-author" th:text="${profile.firstName + ' ' + profile.lastName}"></div>
-                            <div class="post-date" th:text="${post.createdAt}"></div>
+                            <div class="post-author"
+                                 th:text="${profile.firstName + ' ' + profile.lastName}"></div>
+                            <div class="post-date"
+                                 th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}"></div>
                         </div>
                     </div>
                     <p class="post-text" th:text="${post.content}"></p>
@@ -79,6 +90,7 @@
                 <div th:if="${#lists.isEmpty(posts)}" class="empty-state">
                     No posts yet
                 </div>
+
             </div>
         </div>
 

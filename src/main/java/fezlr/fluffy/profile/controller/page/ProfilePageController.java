@@ -29,6 +29,7 @@ public class ProfilePageController {
         log.info("Called findProfile()");
         model.addAttribute("user", customAuthService.getCurrentUser());
         model.addAttribute("profile", profileService.findProfile(id));
+        model.addAttribute("isOwnProfile", customAuthService.getCurrentUser().getProfile().getId().equals(id));
         return "profile/profile";
     }
 }
