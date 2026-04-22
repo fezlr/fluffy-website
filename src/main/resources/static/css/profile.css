@@ -53,14 +53,15 @@
     color: #888;
 }
 
-.btn-edit, .btn-follow {
+.btn-edit,
+.btn-follow {
     padding: 8px 20px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     border: none;
-    transition: background .2s;
+    transition: all 0.2s ease;
 }
 
 .btn-edit {
@@ -68,14 +69,19 @@
     color: #444;
 }
 
-.btn-edit:hover { background: #e4e6e9; }
+.btn-edit:hover {
+    background: #e4e6e9;
+}
 
 .btn-follow {
     background: #5b8def;
     color: #fff;
 }
 
-.btn-follow:hover { background: #4a7be0; }
+.btn-follow:hover {
+    background: #4a7be0;
+}
+
 .btn-follow.following {
     background: #f0f2f5;
     color: #444;
@@ -120,14 +126,26 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
     margin-bottom: -2px;
-    transition: color .2s, border-color .2s;
+    transition: color 0.2s, border-color 0.2s;
 }
 
-.tab.active  { color: #5b8def; border-bottom-color: #5b8def; }
-.tab:hover   { color: #5b8def; }
+.tab.active {
+    color: #5b8def;
+    border-bottom-color: #5b8def;
+}
 
-.tab-content         { display: none; padding: 0 28px; }
-.tab-content.active  { display: block; }
+.tab:hover {
+    color: #5b8def;
+}
+
+.tab-content {
+    display: none;
+    padding: 0 28px;
+}
+
+.tab-content.active {
+    display: block;
+}
 
 .post-card {
     background: #fff;
@@ -135,6 +153,11 @@
     padding: 16px;
     margin-bottom: 12px;
     border: 1px solid #e8e8e8;
+    transition: box-shadow 0.2s;
+}
+
+.post-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .post-header {
