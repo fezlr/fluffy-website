@@ -35,16 +35,46 @@
 .settings-item:hover  { background: #f0f2f5; color: #5b8def; }
 .settings-item.active { background: #eef2fc; color: #5b8def; font-weight: 500; }
 
-.settings-content { flex: 1; }
+.settings-content {
+    flex: 1;
+}
 
-.settings-section        { display: none; }
-.settings-section.active { display: block; }
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
 
 .settings-section h3 {
     font-size: 18px;
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 20px;
+}
+
+.photo-wrapper {
+    width: 220px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.photo-wrapper label {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+#mainPhotoUrl {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .settings-form {
@@ -57,28 +87,45 @@
     gap: 16px;
 }
 
-.form-group {
+.form-group,
+.from-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.form-group label {
+.form-group label,
+.from-group label {
     font-size: 13px;
     font-weight: 500;
     color: #555;
 }
 
-.form-group input {
+.form-group input,
+.from-group input,
+.form-group select,
+.form-group textarea {
     padding: 10px 14px;
     border: 1.5px solid #e0e0e0;
     border-radius: 8px;
     font-size: 14px;
     outline: none;
     transition: border-color .2s;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.form-group input:focus { border-color: #5b8def; }
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.from-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #5b8def;
+}
 
 .btn-save {
     padding: 10px 24px;
@@ -93,7 +140,9 @@
     transition: background .2s;
 }
 
-.btn-save:hover { background: #4a7be0; }
+.btn-save:hover {
+    background: #4a7be0;
+}
 
 .toggle-group {
     display: flex;
@@ -121,7 +170,11 @@
     flex-shrink: 0;
 }
 
-.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
 .toggle-slider {
     position: absolute;
@@ -144,5 +197,10 @@
     transition: transform .2s;
 }
 
-.toggle input:checked + .toggle-slider { background: #5b8def; }
-.toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+.toggle input:checked + .toggle-slider {
+    background: #5b8def;
+}
+
+.toggle input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+}

@@ -37,8 +37,8 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileResponse setup(ProfileRequest request) {
-        log.info("Called setup with BODY = {}", request);
+    public ProfileResponse edit(ProfileRequest request) {
+        log.info("Called edit with BODY = {}", request);
 
         boolean changed = false;
         ProfileEntity profileEntity = customAuthService.getCurrentUser().getProfile();
@@ -92,5 +92,17 @@ public class ProfileService {
     public boolean isFirstNameAndLastNameComplete(ProfileEntity profile) {
         return profile.getFirstName() != null && !profile.getFirstName().isBlank() &&
                 profile.getLastName() != null && !profile.getLastName().isBlank();
+    }
+
+    @Transactional
+    public void uploadAndSaveProfilePhoto(String url) {
+        ProfileEntity profile = customAuthService.getCurrentUser().getProfile();
+        profile.setMainPhotoUrl(url);
+        save(profile);
+    }
+
+    @Transactional
+    public void save(ProfileEntity profile) {
+        profileRepository.save(profile);
     }
 }

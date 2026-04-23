@@ -2,14 +2,15 @@ package fezlr.fluffy.user.service;
 
 import fezlr.fluffy.auth.dto.request.RegisterRequest;
 import fezlr.fluffy.auth.enums.Provider;
+import fezlr.fluffy.profile.entity.ProfileEntity;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.enums.Role;
+import fezlr.fluffy.user.mapper.UserMapper;
 import fezlr.fluffy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     @Transactional
@@ -48,6 +50,10 @@ public class UserService {
     @Transactional
     public void changePassword(UserEntity userEntity, String password) {
         userEntity.setPassword(passwordEncoder.encode(password));
+    }
+
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User is not found"));
     }
 
     public UserRequest createRequest(RegisterRequest request) {

@@ -4,6 +4,8 @@
 
 <th:block th:fragment="extraHead">
     <link th:href="@{/css/settings.css}" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </th:block>
 
 <th:block th:fragment="content">
@@ -12,9 +14,10 @@
         <div class="settings-sidebar">
             <div class="settings-nav">
                 <button class="settings-item active" data-section="account">Account</button>
-                <button class="settings-item" data-section="privacy">Privacy</button>
-                <button class="settings-item" data-section="notifications">Notifications</button>
-                <button class="settings-item" data-section="password">Password</button>
+                <button class="settings-item" data-section="profile">Profile</button>
+<!--                <button class="settings-item" data-section="privacy">Privacy</button>-->
+<!--                <button class="settings-item" data-section="notifications">Notifications</button>-->
+<!--                <button class="settings-item" data-section="password">Password</button>-->
             </div>
         </div>
 
@@ -22,97 +25,68 @@
 
             <div class="settings-section active" id="section-account">
                 <h3>Account</h3>
+
                 <div class="settings-form">
                     <div class="form-group">
-                        <label>First name</label>
-                        <input type="text" placeholder="Ivan">
-                    </div>
-                    <div class="form-group">
-                        <label>Last name</label>
-                        <input type="text" placeholder="Petrov">
-                    </div>
-                    <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="@username">
+                        <input id="username" th:value="${account.username ?: ''}" type="text" placeholder="@Username">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" placeholder="email@example.com">
+                        <input id="email" th:value="${account.email ?: ''}" type="text" placeholder="example@email.com">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="settings-section" id="section-profile">
+                <h3>Profile</h3>
+
+                <div class="photo-wrapper">
+                    <label for="photoInput">
+                        <img id="mainPhotoUrl"
+                             th:src="${profile.mainPhotoUrl != null ? profile.mainPhotoUrl : '/images/default-avatar.png'}"
+                             alt="Profile photo">
+                    </label>
+                    <input type="file"
+                           id="photoInput"
+                           accept="image/*"
+                           hidden>
+                </div>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>First name</label>
+                        <input id="firstName" th:value="${profile.firstName ?: ''}" type="text" placeholder="Firstname">
+                    </div>
+                    <div class="form-group">
+                        <label>Last name</label>
+                        <input id="lastName" th:value="${profile.lastName ?: ''}" type="text" placeholder="Lastname">
+                    </div>
+                    <div class="form-group">
+                        <label>Birth Date</label>
+                        <input id="birthDate" th:value="${profile.birthDate ?: ''}" type="date" placeholder="01.01.2001">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender" th:field="${profile.gender}" name="gender" placeholder="Male">
+                            <option value="">Select Gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                        </select>
+                    </div>
+                    <div class="from-group">
+                        <label>City</label>
+                        <input id="city" th:value="${profile.city ?: ''}" type="text" placeholder="Minsk">
+                    </div>
+                    <div class="form-group">
+                        <label>About me</label>
+                        <textarea id="aboutMe" th:text="${profile.aboutMe ?: ''}" placeholder="About me"></textarea>
                     </div>
                     <button class="btn-save">Save changes</button>
                 </div>
             </div>
 
-            <div class="settings-section" id="section-privacy">
-                <h3>Privacy</h3>
-                <div class="settings-form">
-                    <div class="toggle-group">
-                        <div>
-                            <div class="toggle-label">Private account</div>
-                            <div class="toggle-desc">Only approved followers can see your posts</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-group">
-                        <div>
-                            <div class="toggle-label">Show online status</div>
-                            <div class="toggle-desc">Let others see when you're active</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="settings-section" id="section-notifications">
-                <h3>Notifications</h3>
-                <div class="settings-form">
-                    <div class="toggle-group">
-                        <div>
-                            <div class="toggle-label">New messages</div>
-                            <div class="toggle-desc">Get notified when you receive a message</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-group">
-                        <div>
-                            <div class="toggle-label">Friend requests</div>
-                            <div class="toggle-desc">Get notified about new friend requests</div>
-                        </div>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="settings-section" id="section-password">
-                <h3>Change password</h3>
-                <div class="settings-form">
-                    <div class="form-group">
-                        <label>Current password</label>
-                        <input type="password" placeholder="••••••••">
-                    </div>
-                    <div class="form-group">
-                        <label>New password</label>
-                        <input type="password" placeholder="••••••••">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirm new password</label>
-                        <input type="password" placeholder="••••••••">
-                    </div>
-                    <button class="btn-save">Update password</button>
-                </div>
-            </div>
 
         </div>
     </div>

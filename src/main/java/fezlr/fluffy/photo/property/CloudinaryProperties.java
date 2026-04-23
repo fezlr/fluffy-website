@@ -1,16 +1,19 @@
-package fezlr.fluffy.common.property;
+package fezlr.fluffy.photo.property;
 
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties("spring.application")
-public record CommonProperties(
+@ConfigurationProperties("spring.cloudinary")
+public record CloudinaryProperties(
         @NotBlank
-        String name,
+        String cloudName,
 
         @NotBlank
-        String baseURL
+        String apiKey,
+
+        @NotBlank
+        String apiSecret
 ) {
 }
