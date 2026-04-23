@@ -22,7 +22,7 @@ document.getElementById('submit-btn').addEventListener('click', async function(e
 
     if (!valid) return;
 
-    const response = await fetch('/api/v1/profile/setup', {
+    const response = await fetch('/api/v1/profile/edit', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

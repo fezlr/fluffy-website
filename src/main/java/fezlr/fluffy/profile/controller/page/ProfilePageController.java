@@ -1,8 +1,8 @@
 package fezlr.fluffy.profile.controller.page;
 
 import fezlr.fluffy.common.service.CustomAuthService;
-import fezlr.fluffy.profile.dto.response.ProfileResponse;
 import fezlr.fluffy.profile.service.ProfileService;
+import fezlr.fluffy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProfilePageController {
     private final CustomAuthService customAuthService;
     private final ProfileService profileService;
+    private final UserService userService;
 
     @GetMapping
     public String myProfile() {
@@ -27,8 +28,9 @@ public class ProfilePageController {
     @GetMapping("/{id}")
     public String findProfile(@PathVariable Long id, Model model) {
         log.info("Called findProfile()");
-        model.addAttribute("user", customAuthService.getCurrentUser());
-        model.addAttribute("profile", profileService.findProfile(id));
+        var user = userService.findById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("profile", user.getProfile());
         model.addAttribute("isOwnProfile", customAuthService.getCurrentUser().getProfile().getId().equals(id));
         return "profile/profile";
     }

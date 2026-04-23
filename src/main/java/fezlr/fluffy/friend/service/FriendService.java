@@ -6,6 +6,7 @@ import fezlr.fluffy.friend.mapper.FriendMapper;
 import fezlr.fluffy.friend.repository.FriendRepository;
 import fezlr.fluffy.user.entity.UserEntity;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -45,5 +46,11 @@ public class FriendService {
 
         friendRepository.save(senderToSave);
         friendRepository.save(receiverToSave);
+    }
+
+    @Transactional
+    public void delete(UserEntity senderId, UserEntity receiverId) {
+        friendRepository.deleteByUser(senderId.getProfile().getId());
+        friendRepository.deleteByFriend(receiverId.getProfile().getId());
     }
 }

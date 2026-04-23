@@ -2,12 +2,16 @@ package fezlr.fluffy.friend_request.service;
 
 import fezlr.fluffy.friend.service.FriendService;
 import fezlr.fluffy.friend_request.dto.request.CreateFriendRequest;
+import fezlr.fluffy.friend_request.dto.request.DeleteFriendRequest;
 import fezlr.fluffy.friend_request.dto.response.CreateFriendResponse;
+import fezlr.fluffy.friend_request.dto.response.DeleteFriendResponse;
 import fezlr.fluffy.friend_request.entity.FriendRequestEntity;
 import fezlr.fluffy.friend_request.mapper.FriendRequestMapper;
 import fezlr.fluffy.friend_request.repository.FriendRequestRepository;
 import fezlr.fluffy.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +56,28 @@ public class FriendRequestService {
                 .build();
 
         return friendRequestMapper.toResponse(friendRequestRepository.save(entity), time);
+    }
+
+    @Transactional
+    public DeleteFriendResponse deleteFriendRequest(DeleteFriendRequest request) {
+        if(request.senderId().equals(request.receiverId())) {
+            throw new IllegalStateException("Cannot delete yourself");
+        }
+
+        var friendRequestEntity = friendRequestRepository
+                .findBySenderIdAndReceiverId(request.senderId(), request.receiverId())
+                .orElseThrow(() -> new IllegalStateException("Request is not found"));
+
+        friendRequestRepository.delete(friendRequestEntity);
+
+        var senderIdToSave = userRepository.findById(request.senderId()).orElseThrow(() -> new IllegalArgumentException("Sender user is not found"));
+        var receiverIdToSave = userRepository.findById(request.receiverId()).orElseThrow(() -> new IllegalArgumentException("Receiver user is not found"));
+
+        friendService.delete(senderIdToSave, receiverIdToSave);
+
+        return new DeleteFriendResponse(
+                request.senderId(),
+                request.receiverId(),
+                LocalDateTime.now());
     }
 }
