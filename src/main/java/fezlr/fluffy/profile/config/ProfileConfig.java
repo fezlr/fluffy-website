@@ -17,6 +17,8 @@ public class ProfileConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "/auth/**",
+                        "/error",
+                        "/favicon.ico",
                         "/profile/setup",
                         "/oauth2/**",
                         "/login/oauth2/**",
@@ -31,7 +33,8 @@ public class ProfileConfig implements WebMvcConfigurer {
                         "/reset-password/**",
                         "/reset-password-send-link/**",
                         "/reset-password-complete/**",
-                        "/profile/setup/**"
+                        "/profile/setup/**",
+                        "/api/v1/profile/edit/**"
                 );
     }
 }

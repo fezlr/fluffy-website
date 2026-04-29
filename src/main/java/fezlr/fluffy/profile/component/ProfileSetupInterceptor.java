@@ -21,7 +21,7 @@ public class ProfileSetupInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-       log.info("Called preHandle()");
+        log.info("Called preHandle() for: {}", request.getRequestURI());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
