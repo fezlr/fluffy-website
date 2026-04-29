@@ -16,7 +16,7 @@ public class ProfileSettingsPageController {
     private final CustomAuthService customAuthService;
 
     @GetMapping
-    public String profileMessages(Model model) {
+    public String profileSettings(Model model) {
         log.info("Called profileSettings");
         var user = customAuthService.getCurrentUser();
         model.addAttribute("account", user);

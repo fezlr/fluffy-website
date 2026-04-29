@@ -35,7 +35,7 @@ document.getElementById('submit-btn').addEventListener('click', async function(e
     });
 
     if (response.ok) {
-        window.location.href = '/profile';
+        window.location.href = '/profiles';
     } else {
         document.getElementById('error-box').style.display = 'block';
     }
