@@ -13,8 +13,7 @@ import java.util.Map;
 public class PhotoStorageService {
     private final Cloudinary cloudinary;
 
-
-    public String uploadProfilePhoto(MultipartFile file) {
+    public String uploadPhoto(MultipartFile file) {
         try {
             Map<?, ?> result = cloudinary.uploader().upload(
                     file.getBytes(),

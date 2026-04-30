@@ -23,7 +23,6 @@ public class FriendPageController {
 
     @GetMapping
     public String friends(@PageableDefault(size = 20) Pageable pageable, Model model) {
-        log.info("Called friends");
         Long userId = customAuthService.getCurrentUser().getProfile().getId();
 
         Page<FriendResponse> friends = friendService.findFriends(userId, pageable);
