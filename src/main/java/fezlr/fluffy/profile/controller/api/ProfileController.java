@@ -33,7 +33,7 @@ public class ProfileController {
     @PostMapping("/upload-photo")
     public ResponseEntity<Map<String, String>> uploadPhoto(@Valid @RequestParam("file") MultipartFile file) {
         log.info("Called uploadPhoto() with BODY = {}", file);
-        String url = photoStorageService.uploadProfilePhoto(file);
+        String url = photoStorageService.uploadPhoto(file);
         profileService.uploadAndSaveProfilePhoto(url);
         return ResponseEntity.ok(Map.of("url", url));
     }
