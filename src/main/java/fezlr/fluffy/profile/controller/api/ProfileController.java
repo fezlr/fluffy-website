@@ -22,8 +22,6 @@ public class ProfileController {
     private final ProfileService profileService;
     private final PhotoStorageService photoStorageService;
 
-    private final CloudinaryProperties cloudinaryProperties;
-
     @PostMapping("/edit")
     public ResponseEntity<ProfileResponse> edit(@Valid @RequestBody ProfileRequest request) {
         log.info("Called setup()");

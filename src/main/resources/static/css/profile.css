@@ -54,7 +54,7 @@
 }
 
 .btn-edit,
-.btn-follow {
+.btn-friend {
     padding: 8px 20px;
     border-radius: 8px;
     font-size: 14px;
@@ -73,16 +73,16 @@
     background: #e4e6e9;
 }
 
-.btn-follow {
+.btn-friend {
     background: #5b8def;
     color: #fff;
 }
 
-.btn-follow:hover {
+.btn-friend:hover {
     background: #4a7be0;
 }
 
-.btn-follow.following {
+.btn-friend.following {
     background: #f0f2f5;
     color: #444;
 }
@@ -196,4 +196,35 @@
     color: #aaa;
     font-size: 14px;
     padding: 40px 0;
+}
+
+.profile-bio {
+    padding: 0 28px 20px;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 20px;
+}
+
+.bio-text {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.bio-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.bio-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #666;
+}
+
+.bio-icon {
+    font-size: 15px;
 }

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record FeedResponse(
         @NotNull
+        Long id,
+
+        @NotNull
         Long userId,
 
         @NotBlank

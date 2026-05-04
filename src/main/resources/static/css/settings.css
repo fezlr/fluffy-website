@@ -127,7 +127,7 @@
     border-color: #5b8def;
 }
 
-.btn-save {
+.btn-save, .btn-save-account {
     padding: 10px 24px;
     background: #5b8def;
     color: #fff;
@@ -140,7 +140,7 @@
     transition: background .2s;
 }
 
-.btn-save:hover {
+.btn-save:hover, .btn-save-account:hover {
     background: #4a7be0;
 }
 
@@ -203,4 +203,9 @@
 
 .toggle input:checked + .toggle-slider::before {
     transform: translateX(18px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
