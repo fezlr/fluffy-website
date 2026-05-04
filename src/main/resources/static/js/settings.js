@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const photoInput = document.getElementById("photoInput");
     const photoPreview = document.getElementById("mainPhotoUrl");
     const saveButton = document.querySelector(".btn-save");
+    const accountSaveButton = document.querySelector(".btn-save-account")
 
     const csrfToken = document.querySelector('meta[name="_csrf"]')?.content || "";
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content || "";
@@ -57,22 +58,103 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function bindSave() {
-        if (!saveButton)
-            return;
-
-        saveButton.addEventListener("click", handleSave);
+        saveButton?.addEventListener("click", handleSave);
+        accountSaveButton?.addEventListener("click", handleSaveAccount);
+        bindAccountDirtyCheck();
+        bindProfileDirtyCheck();
     }
+
+    function bindProfileDirtyCheck() {
+        const fields = ["firstName", "lastName", "birthDate", "gender", "city", "aboutMe"];
+
+        const initial = {};
+        fields.forEach(id => {
+            initial[id] = document.getElementById(id)?.value || "";
+        });
+
+        const initialPhoto = photoPreview?.src || "";
+        saveButton.disabled = true;
+
+        function checkDirty() {
+            const changed = fields.some(id => (document.getElementById(id)?.value || "") !== initial[id]);
+            const photoChanged = photoInput?.files?.length > 0;
+            saveButton.disabled = !(changed || photoChanged);
+        }
+
+        fields.forEach(id => {
+            document.getElementById(id)?.addEventListener("input", checkDirty);
+            document.getElementById(id)?.addEventListener("change", checkDirty);
+        });
+
+        photoInput?.addEventListener("change", checkDirty);
+    }
+
+    function bindAccountDirtyCheck() {
+        const usernameInput = document.getElementById("username");
+        const emailInput = document.getElementById("email");
+
+        const initial = {
+            username: usernameInput?.value || "",
+            email: emailInput?.value || "",
+        };
+
+        accountSaveButton.disabled = true;
+
+        function checkDirty() {
+            const changed =
+                usernameInput?.value !== initial.username ||
+                emailInput?.value !== initial.email;
+            accountSaveButton.disabled = !changed;
+        }
+
+        usernameInput?.addEventListener("input", checkDirty);
+        emailInput?.addEventListener("input", checkDirty);
+    }
+
+    async function handleSaveAccount(e) {
+            e.preventDefault();
+
+            if (!csrfToken || !csrfHeader) {
+                console.error("CSRF not found");
+                return;
+            }
+
+            setAccountLoading(true);
+
+            try {
+                const data = {
+                    username: document.getElementById("username")?.value || "",
+                    email: document.getElementById("email")?.value || "",
+                };
+
+                const response = await fetch("/api/v1/user/update", {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        [csrfHeader]: csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Save failed");
+                }
+                alert("Account saved");
+                bindAccountDirtyCheck();
+                window.location.href = "/profiles";
+            } catch (err) {
+                console.error(err);
+                alert("Error while saving");
+            } finally {
+                setAccountLoading(false);
+            }
+        }
 
     async function handleSave(e) {
         e.preventDefault();
 
         if (!csrfToken || !csrfHeader) {
             console.error("CSRF not found");
-            return;
-        }
-
-        if (!photoPreview || isDefaultAvatar(photoPreview.src)) {
-            alert("Select a photo");
             return;
         }
 
@@ -148,4 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (saveButton) saveButton.disabled = state;
         if (photoInput) photoInput.disabled = state;
     }
+
+    function setAccountLoading(state) {
+            if (accountSaveButton) accountSaveButton.disabled = state;
+        }
 });

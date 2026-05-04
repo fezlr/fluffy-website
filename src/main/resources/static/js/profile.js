@@ -15,17 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const followBtn = document.getElementById('follow-btn');
+    const friendBtn = document.getElementById('friend-btn');
 
-    if (followBtn) {
-        followBtn.addEventListener('click', async () => {
+    if (friendBtn) {
+        friendBtn.addEventListener('click', async () => {
 
-            const userId = followBtn.dataset.id;
-            const isFollowing = followBtn.classList.contains('following');
+            const userId = friendBtn.dataset.id;
+            const isFriending = friendBtn.classList.contains('friending');
 
             try {
-                const response = await fetch(`/api/v1/friends/${userId}/follow`, {
-                    method: isFollowing ? 'DELETE' : 'POST',
+                const response = await fetch(`/api/v1/friends/${userId}/friend`, {
+                    method: isFriending ? 'DELETE' : 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content
@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!response.ok) throw new Error();
 
-                followBtn.textContent = isFollowing ? 'Follow' : 'Following';
-                followBtn.classList.toggle('following');
+                friendBtn.textContent = isFriending ? 'Friend' : 'Friending';
+                friendBtn.classList.toggle('friending');
 
             } catch {
                 alert('Error');

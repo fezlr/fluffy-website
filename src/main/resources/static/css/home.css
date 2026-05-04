@@ -236,3 +236,69 @@
     color: #1a1a1a;
     transition: color 0.2s;
 }
+
+.feed-card-actions {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+}
+
+.feed-card-header { position: relative; }
+
+.btn-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    background: #f0f2f5;
+    color: #888;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-card-action:hover { background: #e4e6e9; color: #333; }
+.btn-card-action.btn-card-delete:hover { background: #ffe0e0; color: #d94f4f; }
+
+.edit-preview-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.edit-remove-photo-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.modal--compact { max-width: 360px; }
+
+.delete-modal-text {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+}
+
+.btn-danger {
+    background: #d94f4f;
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-danger:hover { background: #c43e3e; }

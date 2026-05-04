@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class FeedMapper {
     public FeedResponse toResponse(FeedEntity entity) {
         return new FeedResponse(
+                entity.getId(),
                 entity.getUser().getId(),
                 entity.getUser().getProfile().getFirstName(),
                 entity.getUser().getProfile().getLastName(),
