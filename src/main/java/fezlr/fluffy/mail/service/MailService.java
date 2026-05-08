@@ -35,13 +35,13 @@ public class MailService {
     }
 
     @Async
-    public void sendLink(String to, String token) {
+    public void sendLink(String to, String token, String linkSubject, String linkMessage) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
             message.setFrom("%s <%s>".formatted(mailProperties.name(), mailProperties.username()));
-            message.setSubject(mailPropertiesMessages.linkSubjectMessage());
-            message.setText(mailPropertiesMessages.linkMessage().formatted(commonProperties.baseURL(), token));
+            message.setSubject(linkSubject);
+            message.setText(linkMessage.formatted(commonProperties.baseURL(), token));
             mailSender.send(message);
         } catch(MailException e) {
             log.error("Failed to send confirmation link to = {}: {}", to, e.getMessage());

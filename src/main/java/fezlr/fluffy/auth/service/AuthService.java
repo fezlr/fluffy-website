@@ -7,6 +7,8 @@ import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
 import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
 import fezlr.fluffy.auth.dto.response.RegisterResponse;
+import fezlr.fluffy.common.service.CustomAuthService;
+import fezlr.fluffy.mail.property.MailPropertiesMessages;
 import fezlr.fluffy.mail.service.MailService;
 import fezlr.fluffy.profile.entity.ProfileEntity;
 import fezlr.fluffy.profile.service.ProfileService;
@@ -16,6 +18,7 @@ import fezlr.fluffy.token.repository.TokenRepository;
 import fezlr.fluffy.token.service.TokenService;
 import fezlr.fluffy.user.dto.request.UserRequest;
 import fezlr.fluffy.user.entity.UserEntity;
+import fezlr.fluffy.user.enums.Role;
 import fezlr.fluffy.user.repository.UserRepository;
 import fezlr.fluffy.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,15 +28,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class AuthService {
     private final AuthPropertiesMessages authPropertiesMessages;
+    private final CustomAuthService customAuthService;
     private final UserService userService;
     private final ProfileService profileService;
     private final TokenService tokenService;
     private final MailService mailService;
+    private final MailPropertiesMessages mailPropertiesMessages;
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -75,7 +82,7 @@ public class AuthService {
         TokenEntity tokenEntity = tokenService.createLink(entity, TokenType.RESET_PASSWORD);
         tokenService.deactivateAllByUserAndTokenType(entity, TokenType.RESET_PASSWORD);
         tokenService.save(tokenEntity);
-        mailService.sendLink(request.email(), tokenEntity.getToken());
+        mailService.sendLink(request.email(), tokenEntity.getToken(), mailPropertiesMessages.linkSubjectMessage(), mailPropertiesMessages.linkMessage());
         return new AuthResponse(authPropertiesMessages.resetSent());
     }
 
@@ -138,6 +145,48 @@ public class AuthService {
         tokenService.confirm(tokenEntity);
         tokenService.save(tokenEntity);
         userService.save(userEntity);
+
         return new AuthResponse(authPropertiesMessages.codeConfirmed());
+    }
+
+    public AuthResponse sendConfirmEmail(Long id, String newEmail) {
+        UserEntity user = userService.findById(id);
+
+        if (user.getEmail().equals(newEmail)) {
+            throw new IllegalStateException("Email must be different");
+        }
+
+        if (!user.isEnabled()) {
+            throw new IllegalStateException("User is not enabled");
+        }
+
+        if (userRepository.existsByEmail(newEmail)) {
+            throw new IllegalStateException("Email must be unique");
+        }
+
+        if (!customAuthService.getCurrentUser().getId().equals(id) && user.getRole() != Role.ADMIN) {
+            throw new IllegalStateException("It must be your account or you must be an admin");
+        }
+
+        TokenEntity token = tokenService.createLink(user, TokenType.EMAIL_VERIFICATION);
+        token.setNewEmail(newEmail);
+        mailService.sendLink(newEmail, token.getToken(), "Email verification", mailPropertiesMessages.resetEmailMessage());
+        tokenService.save(token);
+
+        return new AuthResponse(authPropertiesMessages.resetEmail());
+    }
+
+    //confirm email verification
+    @Transactional
+    public AuthResponse validateEmailVerificationToken(String tokenString) {
+        TokenEntity token = tokenService.validate(tokenString);
+        UserEntity user = userService.getByToken(token);
+
+        user.setEmail(token.getNewEmail());
+        tokenService.deactivate(token);
+        tokenService.confirm(token);
+        tokenService.save(token);
+
+        return new AuthResponse(authPropertiesMessages.allowed());
     }
 }

@@ -10,6 +10,7 @@ public record MailPropertiesMessages(
         @NotBlank String codeSubjectMessage,
         @NotBlank String linkSubjectMessage,
         @NotBlank String codeMessage,
-        @NotBlank String linkMessage
+        @NotBlank String linkMessage,
+        @NotBlank String resetEmailMessage
 ) {
 }

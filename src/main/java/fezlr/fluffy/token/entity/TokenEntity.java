@@ -40,6 +40,9 @@ public class TokenEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @Column(name = "new_email")
+    private String newEmail;
+
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;

@@ -1,3 +1,6 @@
+const token = document.querySelector('meta[name="_csrf"]').content;
+const header = document.querySelector('meta[name="_csrf_header"]').content;
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const tabs = document.querySelectorAll('.tab');
@@ -24,11 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const isFriending = friendBtn.classList.contains('friending');
 
             try {
-                const response = await fetch(`/api/v1/friends/${userId}/friend`, {
+                const action = isFriending ? 'delete' : 'create'
+                const response = await fetch(`/api/v1/friend-request/${action}/${userId}?senderId=${currentUserId}`, {
                     method: isFriending ? 'DELETE' : 'POST',
                     headers: {
+                        [header]: token,
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]')?.content
                     }
                 });
 

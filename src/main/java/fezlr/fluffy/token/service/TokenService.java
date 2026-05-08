@@ -41,7 +41,6 @@ public class TokenService {
         return tokenEntity;
     }
 
-    @Transactional
     public TokenEntity createLink(UserEntity userEntity, TokenType tokenType) {
         log.info("Called createLink with BODY = {}", userEntity);
         var tokenEntity = TokenEntity
@@ -56,7 +55,7 @@ public class TokenService {
     }
 
     @Transactional
-    public void validate(String token) {
+    public TokenEntity validate(String token) {
         TokenEntity entity = findByToken(token);
 
         if(!entity.isActive()) {
@@ -70,6 +69,8 @@ public class TokenService {
         if(entity.getConfirmedAt() != null) {
             throw new IllegalArgumentException("Token is already used");
         }
+
+        return entity;
     }
 
     @Transactional

@@ -80,20 +80,13 @@ public class UserService {
         boolean isChanged = false;
         UserEntity entity = customAuthService.getCurrentUser();
 
-        if (!request.username().isBlank() &&
-                !Objects.equals(request.username(), entity.getUsername()) &&
-                    !userRepository.existsByUsername(request.username())) {
+        if (request.username() != null &&
+                !request.username().isBlank() &&
+                    !Objects.equals(request.username(), entity.getUsername()) &&
+                        !userRepository.existsByUsername(request.username())) {
             isChanged = true;
             log.info("Username changed");
             entity.setUsername(request.username());
-        }
-
-        if (!request.email().isBlank() &&
-                !Objects.equals(request.email(), entity.getEmail()) &&
-                    !userRepository.existsByEmail(request.email())) {
-            isChanged = true;
-            log.info("Email changed");
-            entity.setEmail(request.email());
         }
 
         //check if changed or not

@@ -29,11 +29,11 @@
                 <div class="settings-form">
                     <div class="form-group">
                         <label>Username</label>
-                        <input id="username" th:value="${account.username ?: ''}" type="text" placeholder="@Username">
+                        <input id="username" th:value="${account.username ?: ''}" th:data-initial="${account.email}" type="text" placeholder="@Username">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input id="email" th:value="${account.email ?: ''}" type="text" placeholder="example@email.com">
+                        <input id="email" th:value="${account.email ?: ''}" th:data-initial="${account.email}" type="text" placeholder="example@email.com">
                     </div>
                     <button class="btn-save-account">Save changes</button>
                 </div>
@@ -88,6 +88,7 @@
             </div>
 
 
+            <div id="accountSection" th:data-user-id="${account.id}"></div>
 
         </div>
     </div>

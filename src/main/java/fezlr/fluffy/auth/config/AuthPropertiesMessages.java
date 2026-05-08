@@ -11,6 +11,8 @@ public record AuthPropertiesMessages(
         @NotBlank String codeConfirmed,
         @NotBlank String resetSent,
         @NotBlank String resetDone,
-        @NotBlank String resetAllowed
+        @NotBlank String resetAllowed,
+        @NotBlank String resetEmail,
+        @NotBlank String allowed
 ) {
 }
