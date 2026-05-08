@@ -1,11 +1,8 @@
 package fezlr.fluffy.friend_request.controller.api;
 
-import fezlr.fluffy.friend_request.dto.request.CreateFriendRequest;
-import fezlr.fluffy.friend_request.dto.request.DeleteFriendRequest;
 import fezlr.fluffy.friend_request.dto.response.CreateFriendResponse;
 import fezlr.fluffy.friend_request.dto.response.DeleteFriendResponse;
 import fezlr.fluffy.friend_request.service.FriendRequestService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class FriendRequestController {
     private final FriendRequestService friendRequestService;
 
-    @PostMapping("/create")
-    public ResponseEntity<CreateFriendResponse> createFriendRequest(@Valid @RequestBody CreateFriendRequest request) {
-        log.info("Called createFriendRequest with BODY = {}", request);
-        return ResponseEntity.ok(friendRequestService.createFriendRequest(request));
+    @PostMapping("/create/{receiverId}")
+    public ResponseEntity<CreateFriendResponse> createFriendRequest(@PathVariable("receiverId") Long receiverId, @RequestParam Long senderId) {
+        log.info("Called createFriendRequest with senderId = {}, receiverId = {}", senderId, receiverId);
+        return ResponseEntity.ok(friendRequestService.createFriendRequest(senderId, receiverId));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<DeleteFriendResponse> deleteFriendRequest(@Valid @RequestBody DeleteFriendRequest request) {
-        log.info("Called deleteFriendRequest with BODY = {}", request);
-        return ResponseEntity.ok(friendRequestService.deleteFriendRequest(request));
+    @DeleteMapping("/delete/{receiverId}")
+    public ResponseEntity<DeleteFriendResponse> deleteFriendRequest(@PathVariable("receiverId") Long receiverId, @RequestParam Long senderId) {
+        log.info("Called deleteFriendRequest with senderId = {}, receiverId = {}", senderId, receiverId);
+        return ResponseEntity.ok(friendRequestService.deleteFriendRequest(senderId, receiverId));
     }
 }

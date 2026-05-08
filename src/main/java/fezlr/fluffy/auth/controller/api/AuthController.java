@@ -1,9 +1,6 @@
 package fezlr.fluffy.auth.controller.api;
 
-import fezlr.fluffy.auth.dto.request.CodeTokenRequest;
-import fezlr.fluffy.auth.dto.request.RegisterRequest;
-import fezlr.fluffy.auth.dto.request.ResetPasswordRequest;
-import fezlr.fluffy.auth.dto.request.SendResetPasswordRequest;
+import fezlr.fluffy.auth.dto.request.*;
 import fezlr.fluffy.auth.dto.response.AuthResponse;
 import fezlr.fluffy.auth.dto.response.RegisterResponse;
 import fezlr.fluffy.auth.service.AuthService;
@@ -46,5 +43,12 @@ public class AuthController {
     public ResponseEntity<AuthResponse> validateCodeToken(@RequestBody @Valid CodeTokenRequest request) {
         log.info("Called validateCodeToken with BODY = {}", request);
         return ResponseEntity.ok(authService.validateCodeToken(request));
+    }
+
+    //when changing email address
+    @PostMapping("/confirm-email/{id}")
+    public ResponseEntity<AuthResponse> sendConfirmEmail(@PathVariable Long id, @RequestBody @Valid String newEmail) {
+        log.info("Called sendConfirmEmail with ID = {}, newEMAIL = {}", id, newEmail);
+        return ResponseEntity.ok(authService.sendConfirmEmail(id, newEmail));
     }
 }

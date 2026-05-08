@@ -34,7 +34,8 @@ public class ProfileConfig implements WebMvcConfigurer {
                         "/reset-password-send-link/**",
                         "/reset-password-complete/**",
                         "/profile/setup/**",
-                        "/api/v1/profile/edit/**"
+                        "/api/v1/profile/edit/**",
+                        "/confirm-email"
                 );
     }
 }

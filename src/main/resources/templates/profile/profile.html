@@ -7,6 +7,8 @@
       )}">
 
 <th:block th:fragment="extraHead">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link th:href="@{/css/profile.css}" rel="stylesheet">
 </th:block>
 
@@ -124,6 +126,9 @@
 </th:block>
 
 <th:block th:fragment="extraScript">
+    <script th:inline="javascript">
+        const currentUserId = [[${currentUser.id}]];
+    </script>
     <script th:src="@{/js/profile.js}"></script>
 </th:block>
 

@@ -111,44 +111,73 @@ document.addEventListener("DOMContentLoaded", () => {
         emailInput?.addEventListener("input", checkDirty);
     }
 
-    async function handleSaveAccount(e) {
-            e.preventDefault();
+   async function handleSaveAccount(e) {
+       e.preventDefault();
 
-            if (!csrfToken || !csrfHeader) {
-                console.error("CSRF not found");
-                return;
-            }
+       if (!csrfToken || !csrfHeader) {
+           console.error("CSRF not found");
+           return;
+       }
 
-            setAccountLoading(true);
+       setAccountLoading(true);
 
-            try {
-                const data = {
-                    username: document.getElementById("username")?.value || "",
-                    email: document.getElementById("email")?.value || "",
-                };
+       try {
+           const usernameInput = document.getElementById("username");
+           const emailInput = document.getElementById("email");
 
-                const response = await fetch("/api/v1/user/update", {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                        [csrfHeader]: csrfToken
-                    },
-                    body: JSON.stringify(data)
-                });
+           const newUsername = usernameInput?.value || "";
+           const newEmail = emailInput?.value || "";
 
-                if (!response.ok) {
-                    throw new Error("Save failed");
-                }
-                alert("Account saved");
-                bindAccountDirtyCheck();
-                window.location.href = "/profiles";
-            } catch (err) {
-                console.error(err);
-                alert("Error while saving");
-            } finally {
-                setAccountLoading(false);
-            }
-        }
+           const initialUsername = usernameInput?.dataset.initial || "";
+           const initialEmail = emailInput?.dataset.initial || "";
+
+           const emailChanged = newEmail !== initialEmail;
+           const usernameChanged = newUsername !== initialUsername;
+
+           if (emailChanged) {
+               const userId = document.getElementById("accountSection")?.dataset.userId;
+
+               const response = await fetch(`/api/v1/auth/confirm-email/${userId}`, {
+                   method: "POST",
+                   headers: {
+                       "Content-Type": "application/json",
+                       [csrfHeader]: csrfToken
+                   },
+                   body: newEmail
+               });
+
+               if (!response.ok) {
+                       const err = await response.json();
+                       throw new Error(err.message || "Failed to send confirmation email");
+               }
+
+               alert("Confirmation email sent. Please check your inbox.");
+           }
+
+           if (usernameChanged) {
+               const response = await fetch("/api/v1/user/update", {
+                   method: "PATCH",
+                   headers: {
+                       "Content-Type": "application/json",
+                       [csrfHeader]: csrfToken
+                   },
+                   body: JSON.stringify({ username: newUsername })
+               });
+
+               if (!response.ok) throw new Error("Failed to save username");
+           }
+
+           if (!emailChanged) {
+               window.location.href = "/profiles";
+           }
+
+       } catch (err) {
+           console.error(err);
+           alert(err.message);
+       } finally {
+           setAccountLoading(false);
+       }
+   }
 
     async function handleSave(e) {
         e.preventDefault();

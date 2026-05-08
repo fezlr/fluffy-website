@@ -40,6 +40,9 @@ spring:
     username: ${EMAIL_ADDRESS}
     password: ${EMAIL_PASSWORD}
     messages:
+      reset-email-message:  |
+        Verify your email:
+        %s/confirm-email?token=%s
       code-subject-message: "Confirm your email"
       code-message: |
         Thank you for registration. 
@@ -58,8 +61,10 @@ spring:
             required: true
   auth:
     messages:
+      reset-email: "A confirmation link has been sent to your old email address. It expires in 15 minutes - do not share it."
       code-sent: "A confirmation code has been sent. It expires in 15 minutes — do not share it."
       code-confirmed: "Your account has been successfully activated."
       reset-sent: "A confirmation link has been sent. It expires in 15 minutes — do not share it."
       reset-done: "Your password has been successfully changed."
       reset-allowed: "You can now change your password."
+      allowed: "Valuable validate"
