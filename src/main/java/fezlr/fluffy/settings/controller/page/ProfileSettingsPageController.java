@@ -1,6 +1,7 @@
 package fezlr.fluffy.settings.controller.page;
 
 import fezlr.fluffy.common.service.CustomAuthService;
+import fezlr.fluffy.friend_request.service.FriendRequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/profile/settings")
 public class ProfileSettingsPageController {
     private final CustomAuthService customAuthService;
+    private final FriendRequestService friendRequestService;
 
     @GetMapping
     public String profileSettings(Model model) {

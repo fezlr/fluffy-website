@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
             contents.forEach(c => c.classList.remove('active'));
-
             tab.classList.add('active');
-
             const target = document.getElementById('tab-' + tab.dataset.tab);
             if (target) target.classList.add('active');
         });
@@ -22,29 +20,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (friendBtn) {
         friendBtn.addEventListener('click', async () => {
-
             const userId = friendBtn.dataset.id;
-            const isFriending = friendBtn.classList.contains('friending');
+            const isPending = friendBtn.classList.contains('pending');
+            const isFriend = friendBtn.classList.contains('friend');
+
+            const url = isFriend
+                ? `/api/v1/friend/delete/${userId}?senderId=${currentUserId}`
+                : `/api/v1/friend-request/${isPending ? 'delete' : 'create'}/${userId}?senderId=${currentUserId}`;
+            const method = (isPending || isFriend) ? 'DELETE' : 'POST';
 
             try {
-                const action = isFriending ? 'delete' : 'create'
-                const response = await fetch(`/api/v1/friend-request/${action}/${userId}?senderId=${currentUserId}`, {
-                    method: isFriending ? 'DELETE' : 'POST',
-                    headers: {
-                        [header]: token,
-                        'Content-Type': 'application/json',
-                    }
+                const response = await fetch(url, {
+                    method,
+                    headers: { [header]: token, 'Content-Type': 'application/json' }
                 });
 
                 if (!response.ok) throw new Error();
 
-                friendBtn.textContent = isFriending ? 'Friend' : 'Friending';
-                friendBtn.classList.toggle('friending');
-
+                if (isFriend || isPending) {
+                    friendBtn.textContent = 'Add a friend';
+                    friendBtn.classList.remove('friend', 'pending');
+                } else {
+                    friendBtn.textContent = 'Pending';
+                    friendBtn.classList.add('pending');
+                }
             } catch {
                 alert('Error');
             }
         });
     }
-
 });
