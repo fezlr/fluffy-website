@@ -127,7 +127,8 @@
     border-color: #5b8def;
 }
 
-.btn-save, .btn-save-account {
+.btn-save,
+.btn-save-account {
     padding: 10px 24px;
     background: #5b8def;
     color: #fff;
@@ -140,8 +141,26 @@
     transition: background .2s;
 }
 
-.btn-save:hover, .btn-save-account:hover {
+.btn-save:hover,
+.btn-save-account:hover {
     background: #4a7be0;
+}
+
+.btn-reset-password {
+    padding: 10px 24px;
+    background: transparent;
+    color: #e05c5c;
+    border: 1.5px solid #e05c5c;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background .2s, color .2s;
+}
+
+.btn-reset-password:hover {
+    background: #fdf0f0;
 }
 
 .toggle-group {

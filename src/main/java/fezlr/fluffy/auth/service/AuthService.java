@@ -149,6 +149,7 @@ public class AuthService {
         return new AuthResponse(authPropertiesMessages.codeConfirmed());
     }
 
+    @Transactional
     public AuthResponse sendConfirmEmail(Long id, String newEmail) {
         UserEntity user = userService.findById(id);
 
