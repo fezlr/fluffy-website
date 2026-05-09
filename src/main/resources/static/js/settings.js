@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function bindSave() {
         saveButton?.addEventListener("click", handleSave);
         accountSaveButton?.addEventListener("click", handleSaveAccount);
+        document.getElementById("resetPasswordBtn")?.addEventListener("click", sendResetPasswordLink);
         bindAccountDirtyCheck();
         bindProfileDirtyCheck();
     }
@@ -246,6 +247,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
         return data.url;
     }
+
+    const userEmail = document.getElementById("accountEmail")?.dataset.userEmail;
+    async function sendResetPasswordLink() {
+        try {
+            const response = await fetch("/api/v1/auth/send-reset-password", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            [csrfHeader]: csrfToken
+                        },
+                        body: JSON.stringify({
+                            email: userEmail
+                        })
+                    });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || "Failed to send reset link");
+                }
+
+                alert("Reset link sent to your email");
+            } catch (error) {
+                console.error(error);
+                alert(error.message)
+            }
+
+
+
+
+    }
+
 
     function getValue(id) {
         return document.getElementById(id)?.value || "";

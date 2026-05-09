@@ -14,6 +14,5 @@ async function sendResetPasswordLink() {
         alert("Message has been successfully sent to your email")
     } else {
         const error = await response.json();
-        window.location.href = `/register?error=${error.status}`;
     }
 }
