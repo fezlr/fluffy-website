@@ -76,15 +76,37 @@
 .btn-friend {
     background: #5b8def;
     color: #fff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, color 0.2s;
 }
 
 .btn-friend:hover {
     background: #4a7be0;
 }
 
-.btn-friend.following {
+.btn-friend.pending {
+    background: #f0f2f5;
+    color: #888;
+}
+
+.btn-friend.pending:hover {
+    background: #e4e6e9;
+    color: #444;
+}
+
+.btn-friend.friend {
     background: #f0f2f5;
     color: #444;
+}
+
+.btn-friend.friend:hover {
+    background: #fdecea;
+    color: #e05c5c;
 }
 
 .profile-stats {

@@ -43,9 +43,10 @@
 
                     <button th:unless="${isOwnProfile}"
                             class="btn-friend"
+                            th:classappend="${isFriend} ? ' friend' : (${hasPendingRequest} ? ' pending' : '')"
                             id="friend-btn"
-                            th:data-id="${user.id}">
-                        Add a friend
+                            th:data-id="${user.id}"
+                            th:text="${isFriend} ? 'Friends' : (${hasPendingRequest} ? 'Pending' : 'Add a friend')">
                     </button>
                 </div>
             </div>
@@ -69,58 +70,7 @@
         </span>
                 </div>
             </div>
-
-
-<!--            <div class="profile-stats">-->
-<!--                <div class="stat">-->
-<!--                    <span class="stat-value" th:text="${postsCount}">0</span>-->
-<!--                    <span class="stat-label">Posts</span>-->
-<!--                </div>-->
-<!--                <div class="stat">-->
-<!--                    <span class="stat-value" th:text="${followersCount}">0</span>-->
-<!--                    <span class="stat-label">Followers</span>-->
-<!--                </div>-->
-<!--                <div class="stat">-->
-<!--                    <span class="stat-value" th:text="${followingCount}">0</span>-->
-<!--                    <span class="stat-label">Following</span>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
-
-<!--        <div class="profile-tabs">-->
-<!--            <button class="tab active" data-tab="posts">Posts</button>-->
-<!--            <button class="tab" data-tab="photos">Photos</button>-->
-<!--        </div>-->
-
-<!--        <div class="tab-content active" id="tab-posts">-->
-<!--            <div class="posts-grid">-->
-
-<!--                <div th:each="post : ${posts}" class="post-card">-->
-<!--                    <div class="post-header">-->
-<!--                        <img class="post-avatar"-->
-<!--                             th:src="${profile.mainPhotoUrl != null ? profile.mainPhotoUrl : '/images/default-avatar.png'}"-->
-<!--                             alt="">-->
-<!--                        <div>-->
-<!--                            <div class="post-author"-->
-<!--                                 th:text="${profile.firstName + ' ' + profile.lastName}"></div>-->
-<!--                            <div class="post-date"-->
-<!--                                 th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <p class="post-text" th:text="${post.content}"></p>-->
-<!--                </div>-->
-
-<!--                <div th:if="${#lists.isEmpty(posts)}" class="empty-state">-->
-<!--                    No posts yet-->
-<!--                </div>-->
-
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="tab-content" id="tab-photos">-->
-<!--            <div class="empty-state">No photos yet</div>-->
-<!--        </div>-->
-
     </div>
 
 </th:block>

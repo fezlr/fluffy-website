@@ -25,6 +25,7 @@ public class FriendRequestService {
 
     @Transactional
     public CreateFriendResponse createFriendRequest(Long senderId, Long receiverId) {
+        log.info("Called createFriendRequest with SENDERID = {}, RECEIVERID = {}", senderId, receiverId);
         if(receiverId.equals(senderId)) {
             throw new IllegalArgumentException("Cannot send a friend request to yourself");
         }
@@ -33,9 +34,11 @@ public class FriendRequestService {
         boolean mutualExists = friendRequestRepository.existsBySenderIdAndReceiverId(receiverId, senderId);
 
         if(mutualExists) {
+            log.info("mutualExists");
             var senderIdToSave = userRepository.findById(senderId).orElseThrow(() -> new IllegalArgumentException("Sender user is not found"));
             var receiverIdToSave = userRepository.findById(receiverId).orElseThrow(() -> new IllegalArgumentException("Receiver user is not found"));
 
+            friendRequestRepository.deleteBySenderIdAndReceiverId(receiverId, senderId);
             friendService.createFriendship(senderIdToSave, receiverIdToSave);
 
             return friendRequestMapper.toResponse(new FriendRequestEntity(), time);
@@ -78,5 +81,9 @@ public class FriendRequestService {
                 senderId,
                 receiverId,
                 LocalDateTime.now());
+    }
+
+    public boolean existsBySenderIdAndReceiverId(Long senderId, Long receiverId) {
+        return friendRequestRepository.existsBySenderIdAndReceiverId(senderId, receiverId);
     }
 }
