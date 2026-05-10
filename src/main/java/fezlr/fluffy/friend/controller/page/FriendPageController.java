@@ -3,6 +3,10 @@ package fezlr.fluffy.friend.controller.page;
 import fezlr.fluffy.common.service.CustomAuthService;
 import fezlr.fluffy.friend.dto.response.FriendResponse;
 import fezlr.fluffy.friend.service.FriendService;
+import fezlr.fluffy.friend_request.dto.response.FriendRequestInfoResponse;
+import fezlr.fluffy.friend_request.service.FriendRequestService;
+import fezlr.fluffy.user.entity.UserEntity;
+import fezlr.fluffy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,24 +23,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/profile/friends")
 public class FriendPageController {
     private final CustomAuthService customAuthService;
+    private final FriendRequestService friendRequestService;
     private final FriendService friendService;
 
     @GetMapping
     public String friends(@PageableDefault(size = 20) Pageable pageable, Model model) {
-        Long userId = customAuthService.getCurrentUser().getProfile().getId();
+        UserEntity currentUser = customAuthService.getCurrentUser();
+        Long userId = currentUser.getId();
+        Long profileId = currentUser.getProfile().getId();
 
         Page<FriendResponse> friends = friendService.findFriends(userId, pageable);
+        Page<FriendRequestInfoResponse> outgoing = friendRequestService.findOutgoing(userId,pageable);
+        Page<FriendRequestInfoResponse> incoming = friendRequestService.findIncoming(userId, pageable);
 
-        if(friends.getTotalElements() == 0 || friends.isEmpty()) {
-            return "redirect:/profile/friends/not-found";
-        }
-
+        model.addAttribute("outgoing", outgoing);
+        model.addAttribute("incoming", incoming);
+        model.addAttribute("userId", profileId);
         model.addAttribute("friends", friends);
-        return "profile/friends";
-    }
 
-    @GetMapping("/not-found")
-    public String friendsNotFound() {
-        return "profile/friends-not-found";
+        return "profile/friends";
     }
 }

@@ -3,83 +3,111 @@
       th:replace="~{layout/main :: layout(~{::content}, ~{::extraHead}, ~{::extraScript})}">
 
 <th:block th:fragment="extraHead">
+    <meta name="_csrf"        th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link th:href="@{/css/friends.css}" rel="stylesheet">
 </th:block>
 
 <th:block th:fragment="content">
-    <div class="friends-page">
+    <div class="friends-page"
+         th:data-user-id="${profileId}">
 
-        <div class="friends-header">
-            <h2>Friends</h2>
-            <input type="text" class="search-input" placeholder="Search people...">
+        <div class="friends-topbar">
+            <h1>Friends</h1>
+            <input type="text" id="search-input" class="search-input" placeholder="Search...">
         </div>
 
         <div class="friends-tabs">
-            <button class="tab active" data-tab="all">All friends</button>
-            <button class="tab" data-tab="requests">Requests <span class="badge">3</span></button>
-            <button class="tab" data-tab="suggestions">Suggestions</button>
+            <button class="tab-btn tab-btn--active" data-tab="friends">
+                Friends
+                <span class="tab-count" th:text="${friends.totalElements}"></span>
+            </button>
+            <button class="tab-btn" data-tab="incoming">
+                Incoming
+                <span class="tab-count" th:text="${incoming.totalElements}"></span>
+            </button>
+            <button class="tab-btn" data-tab="outgoing">
+                Outgoing
+                <span class="tab-count" th:text="${outgoing.totalElements}"></span>
+            </button>
         </div>
 
-        <div class="tab-content active" id="tab-all">
-            <div class="friends-grid">
-                <div class="friend-card">
-                    <img src="https://i.pravatar.cc/80?img=1" class="friend-avatar" alt="">
-                    <div class="friend-name">John Doe</div>
-                    <div class="friend-mutual">5 mutual friends</div>
-                    <div class="friend-actions">
-                        <button class="btn-message">Message</button>
-                        <button class="btn-remove">Remove</button>
+        <div id="tab-friends" class="tab-panel">
+            <div class="friends-grid" th:if="${not friends.isEmpty()}">
+                <a class="friend-card" th:each="f : ${friends}"
+                   th:href="@{/profiles/{id}(id=${f.profileId})}">
+                    <img class="friend-avatar"
+                         th:src="${f.mainPhotoUrl != null ? f.mainPhotoUrl : '/images/default-avatar.png'}"
+                         alt="">
+                    <div class="friend-info">
+                <span class="friend-name"
+                      th:text="${f.firstName + ' ' + f.lastName}"></span>
+                        <span class="friend-meta" th:if="${f.gender != null}"
+                              th:text="${f.gender}"></span>
+                        <span class="friend-meta" th:if="${f.birthDate != null}"
+                              th:text="${#temporals.format(f.birthDate, 'dd MMM yyyy')}"></span>
                     </div>
-                </div>
-                <div class="friend-card">
-                    <img src="https://i.pravatar.cc/80?img=2" class="friend-avatar" alt="">
-                    <div class="friend-name">Jane Smith</div>
-                    <div class="friend-mutual">2 mutual friends</div>
-                    <div class="friend-actions">
-                        <button class="btn-message">Message</button>
-                        <button class="btn-remove">Remove</button>
-                    </div>
-                </div>
-                <div class="friend-card">
-                    <img src="https://i.pravatar.cc/80?img=3" class="friend-avatar" alt="">
-                    <div class="friend-name">Mike Johnson</div>
-                    <div class="friend-mutual">8 mutual friends</div>
-                    <div class="friend-actions">
-                        <button class="btn-message">Message</button>
-                        <button class="btn-remove">Remove</button>
-                    </div>
-                </div>
+                </a>
+            </div>
+            <div class="empty-state" th:if="${friends.isEmpty()}">
+                <p>No friends yet</p>
             </div>
         </div>
 
-        <div class="tab-content" id="tab-requests">
-            <div class="friends-grid">
-                <div class="friend-card">
-                    <img src="https://i.pravatar.cc/80?img=4" class="friend-avatar" alt="">
-                    <div class="friend-name">Alice Brown</div>
-                    <div class="friend-mutual">1 mutual friend</div>
-                    <div class="friend-actions">
-                        <button class="btn-accept">Accept</button>
-                        <button class="btn-remove">Decline</button>
-                    </div>
+        <div id="tab-incoming" class="tab-panel" style="display: none;">
+            <div class="requests-list" th:if="${not incoming.isEmpty()}">
+                <div class="request-card" th:each="r : ${incoming}"
+                     th:data-id="${r.profileId}">
+                    <a class="request-card-info"
+                       th:href="@{/profiles/{id}(id=${r.profileId})}">
+                        <img class="friend-avatar"
+                             th:src="${r.mainPhotoUrl != null ? r.mainPhotoUrl : '/images/default-avatar.png'}"
+                             alt="">
+                        <div class="friend-info">
+                    <span class="friend-name"
+                          th:text="${r.firstName + ' ' + r.lastName}"></span>
+                            <span class="friend-meta" th:if="${r.gender != null}"
+                                  th:text="${r.gender}"></span>
+                            <span class="friend-meta" th:if="${r.birthDate != null}"
+                                  th:text="${#temporals.format(r.birthDate, 'dd MMM yyyy')}"></span>
+                        </div>
+                    </a>
+                    <button class="btn-accept-request" th:data-id="${r.profileId}">Accept</button>
                 </div>
+            </div>
+            <div class="empty-state" th:if="${incoming.isEmpty()}">
+                <p>No incoming requests</p>
             </div>
         </div>
 
-        <div class="tab-content" id="tab-suggestions">
-            <div class="friends-grid">
-                <div class="friend-card">
-                    <img src="https://i.pravatar.cc/80?img=5" class="friend-avatar" alt="">
-                    <div class="friend-name">Bob Wilson</div>
-                    <div class="friend-mutual">3 mutual friends</div>
-                    <div class="friend-actions">
-                        <button class="btn-accept">Add friend</button>
-                    </div>
+        <div id="tab-outgoing" class="tab-panel" style="display: none;">
+            <div class="requests-list" th:if="${not outgoing.isEmpty()}">
+                <div class="request-card" th:each="r : ${outgoing}"
+                     th:data-id="${r.profileId}">
+                    <a class="request-card-info"
+                       th:href="@{/profiles/{id}(id=${r.profileId})}">
+                        <img class="friend-avatar"
+                             th:src="${r.mainPhotoUrl != null ? r.mainPhotoUrl : '/images/default-avatar.png'}"
+                             alt="">
+                        <div class="friend-info">
+                    <span class="friend-name"
+                          th:text="${r.firstName + ' ' + r.lastName}"></span>
+                            <span class="friend-meta" th:if="${r.gender != null}"
+                                  th:text="${r.gender}"></span>
+                            <span class="friend-meta" th:if="${r.birthDate != null}"
+                                  th:text="${#temporals.format(r.birthDate, 'dd MMM yyyy')}"></span>
+                        </div>
+                    </a>
+                    <button class="btn-cancel-request" th:data-id="${r.profileId}">Cancel</button>
                 </div>
+            </div>
+            <div class="empty-state" th:if="${outgoing.isEmpty()}">
+                <p>No outgoing requests</p>
             </div>
         </div>
 
     </div>
+    <input type="hidden" id="current-user-id" th:value="${userId}">
 </th:block>
 
 <th:block th:fragment="extraScript">

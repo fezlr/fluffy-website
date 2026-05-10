@@ -3,12 +3,18 @@ package fezlr.fluffy.friend_request.service;
 import fezlr.fluffy.friend.service.FriendService;
 import fezlr.fluffy.friend_request.dto.response.CreateFriendResponse;
 import fezlr.fluffy.friend_request.dto.response.DeleteFriendResponse;
+import fezlr.fluffy.friend_request.dto.response.FriendRequestInfoResponse;
 import fezlr.fluffy.friend_request.entity.FriendRequestEntity;
+import fezlr.fluffy.friend_request.mapper.FriendRequestInfoMapper;
 import fezlr.fluffy.friend_request.mapper.FriendRequestMapper;
 import fezlr.fluffy.friend_request.repository.FriendRequestRepository;
+import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.repository.UserRepository;
+import fezlr.fluffy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +25,10 @@ import java.time.LocalDateTime;
 @Service
 public class FriendRequestService {
     private final UserRepository userRepository;
+    private final UserService userService;
     private final FriendRequestRepository friendRequestRepository;
     private final FriendRequestMapper friendRequestMapper;
+    private final FriendRequestInfoMapper friendRequestInfoMapper;
     private final FriendService friendService;
 
     @Transactional
@@ -85,5 +93,15 @@ public class FriendRequestService {
 
     public boolean existsBySenderIdAndReceiverId(Long senderId, Long receiverId) {
         return friendRequestRepository.existsBySenderIdAndReceiverId(senderId, receiverId);
+    }
+
+    public Page<FriendRequestInfoResponse> findOutgoing(Long userId, Pageable pageable) {
+        return friendRequestRepository.findAllBySenderId(userId, pageable)
+                .map(e -> friendRequestInfoMapper.toResponse(userService.findById(e.getReceiverId()).getProfile(), e.getCreatedAt()));
+    }
+
+    public Page<FriendRequestInfoResponse> findIncoming(Long userId, Pageable pageable) {
+        return friendRequestRepository.findAllByReceiverId(userId, pageable)
+                .map(e -> friendRequestInfoMapper.toResponse(userService.findById(e.getSenderId()).getProfile(), e.getCreatedAt()));
     }
 }

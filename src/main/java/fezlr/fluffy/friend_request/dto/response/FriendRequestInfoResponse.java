@@ -1,10 +1,11 @@
-package fezlr.fluffy.friend.dto.response;
+package fezlr.fluffy.friend_request.dto.response;
 
 import fezlr.fluffy.profile.enums.Gender;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public record FriendResponse(
+public record FriendRequestInfoResponse(
         Long profileId,
 
         String firstName,
@@ -15,6 +16,8 @@ public record FriendResponse(
 
         Gender gender,
 
-        String mainPhotoUrl
+        String mainPhotoUrl,
+
+        LocalDateTime createdAt
 ) {
 }
