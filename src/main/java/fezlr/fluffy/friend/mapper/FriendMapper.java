@@ -8,9 +8,10 @@ import org.springframework.stereotype.Component;
 public class FriendMapper {
     public FriendResponse toResponse(FriendEntity entity) {
         return new FriendResponse(
-                entity.getUser().getProfile().getId(),
+                entity.getFriend().getProfile().getId(),
                 entity.getFriend().getProfile().getFirstName(),
                 entity.getFriend().getProfile().getLastName(),
+                entity.getFriend().getProfile().getBirthDate(),
                 entity.getFriend().getProfile().getGender(),
                 entity.getFriend().getProfile().getMainPhotoUrl()
         );

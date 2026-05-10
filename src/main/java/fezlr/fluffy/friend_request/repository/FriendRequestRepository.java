@@ -35,6 +35,10 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequestEnti
         """)
     Page<FriendRequestEntity> findMutualFriendRequests(@Param("myId") Long id, Pageable pageable);
 
+    Page<FriendRequestEntity> findAllBySenderId(Long senderId, Pageable pageable);
+
+    Page<FriendRequestEntity> findAllByReceiverId(Long receiverId, Pageable pageable);
+
     @Modifying
     void deleteBySenderIdAndReceiverId(Long senderId, Long receiverId);
 }

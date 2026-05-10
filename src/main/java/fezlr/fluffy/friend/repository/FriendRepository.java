@@ -22,7 +22,7 @@ public interface FriendRepository extends JpaRepository<FriendEntity, Long> {
     @Query("""
         SELECT f
         FROM FriendEntity f
-        WHERE f.user.id <> :myId
+        WHERE f.friend.id <> :myId
         """)
     Page<FriendEntity> findFriends(@Param("myId") Long id, Pageable pageable);
 
