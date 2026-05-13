@@ -280,3 +280,12 @@ btnDeleteConfirm.addEventListener('click', async () => {
         btnDeleteConfirm.disabled = false;
     }
 });
+
+document.querySelectorAll('.suggestion-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        if (e.target.closest('.suggestion-link')) return;
+
+        const userIdVal = item.dataset.userId;
+        if (userIdVal) window.location.href = `/profiles/${userIdVal}`;
+    });
+});
