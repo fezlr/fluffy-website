@@ -32,6 +32,6 @@ public interface FriendRepository extends JpaRepository<FriendEntity, Long> {
         SELECT COUNT(f) > 0
         FROM FriendEntity f
         WHERE f.user.id = :senderId AND f.friend.id = :receiverId
-            """)
+        """)
     boolean existsBySenderIdAndReceiverId(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
 }
