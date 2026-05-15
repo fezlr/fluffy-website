@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/profile/chats")
 public class ChatPageController {
+    private final CustomAuthService customAuthService;
     private final ChatApiController chatApiController;
 
     @GetMapping
     public String profileChats(Model model) {
 
+        model.addAttribute("profile", customAuthService.getCurrentUser().getProfile());
         model.addAttribute("chats", chatApiController.allChatsByCurrentUser());
 
         return "profile/chat";

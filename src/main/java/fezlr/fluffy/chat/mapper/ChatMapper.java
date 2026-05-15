@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class ChatMapper {
     public ChatResponse toResponse(ChatEntity entity) {
         return new ChatResponse(
+                entity.getId(),
                 entity.getName(),
                 entity.getUserOne().getId(),
                 entity.getUserTwo().getId(),
