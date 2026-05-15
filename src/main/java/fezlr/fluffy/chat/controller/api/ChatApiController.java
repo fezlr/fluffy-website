@@ -5,6 +5,7 @@ import fezlr.fluffy.chat.dto.response.ChatDeleteResponse;
 import fezlr.fluffy.chat.dto.response.ChatResponse;
 import fezlr.fluffy.chat.service.ChatService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ChatApiController {
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<ChatResponse> update(@PathVariable("id") Long id, @Valid String name) {
+    public ResponseEntity<ChatResponse> update(@PathVariable("id") Long id, @NotBlank String name) {
         log.info("Called update with id = {}, name = {}", id, name);
         return ResponseEntity.ok(chatService.update(id, name));
     }

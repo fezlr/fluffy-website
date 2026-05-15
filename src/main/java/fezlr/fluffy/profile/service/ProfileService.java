@@ -49,45 +49,45 @@ public class ProfileService {
         boolean changed = false;
         ProfileEntity profileEntity = customAuthService.getCurrentUser().getProfile();
 
-        if(!Objects.equals(request.firstName(), profileEntity.getFirstName())) {
+        if (!Objects.equals(request.firstName(), profileEntity.getFirstName())) {
             profileEntity.setFirstName(request.firstName());
             changed = true;
         }
 
-        if(!Objects.equals(request.lastName(), profileEntity.getLastName())) {
+        if (!Objects.equals(request.lastName(), profileEntity.getLastName())) {
             profileEntity.setLastName(request.lastName());
             changed = true;
         }
 
-        if(!Objects.equals(request.birthDate(), profileEntity.getBirthDate())) {
+        if (!Objects.equals(request.birthDate(), profileEntity.getBirthDate())) {
             profileEntity.setBirthDate(request.birthDate());
             changed = true;
         }
 
-        if(!Objects.equals(request.gender(), profileEntity.getGender())) {
+        if (!Objects.equals(request.gender(), profileEntity.getGender())) {
             profileEntity.setGender(request.gender());
             changed = true;
         }
 
-        if(!Objects.equals(request.city(), profileEntity.getCity())) {
+        if (!Objects.equals(request.city(), profileEntity.getCity())) {
             profileEntity.setCity(request.city());
             changed = true;
         }
 
-        if(!Objects.equals(request.aboutMe(), profileEntity.getAboutMe())) {
+        if (!Objects.equals(request.aboutMe(), profileEntity.getAboutMe())) {
             profileEntity.setAboutMe(request.aboutMe());
             changed = true;
         }
 
         //check whether is complete or not
-        if(isFirstNameAndLastNameComplete(profileEntity)) {
+        if (isFirstNameAndLastNameComplete(profileEntity)) {
             profileEntity.setComplete(true);
         } else {
             profileEntity.setComplete(false);
         }
 
         //save & return
-        if(changed) {
+        if (changed) {
             return profileMapper.toResponse(profileRepository.save(profileEntity));
         }
 

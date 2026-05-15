@@ -71,4 +71,12 @@ public class ChatService {
         chatRepository.deleteById(id);
         return new ChatDeleteResponse(id, "Delete has been successfully done");
     }
+
+    public ChatEntity findById(Long id) {
+        return chatRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Chat is not found"));
+    }
+
+    public boolean existsById(Long id) {
+        return chatRepository.existsById(id);
+    }
 }

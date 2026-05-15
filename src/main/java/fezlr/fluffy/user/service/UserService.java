@@ -61,6 +61,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User is not found"));
     }
 
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
     public UserRequest createRequest(RegisterRequest request) {
         return new UserRequest(
                 request.email(),
