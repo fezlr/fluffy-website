@@ -1,22 +1,29 @@
 package fezlr.fluffy.chat.controller.api;
 
 import fezlr.fluffy.chat.dto.request.ChatCreateRequest;
+import fezlr.fluffy.chat.dto.request.ChatDirectRequest;
+import fezlr.fluffy.chat.dto.request.ChatUpdateRequest;
 import fezlr.fluffy.chat.dto.response.ChatDeleteResponse;
 import fezlr.fluffy.chat.dto.response.ChatResponse;
 import fezlr.fluffy.chat.service.ChatService;
+import fezlr.fluffy.photo.service.PhotoStorageService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController("/api/v1/chats")
+@RestController
+@RequestMapping("/api/v1/chats")
 public class ChatApiController {
+    private final PhotoStorageService photoStorageService;
     private final ChatService chatService;
 
     @GetMapping
@@ -30,10 +37,22 @@ public class ChatApiController {
         return ResponseEntity.ok(chatService.create(request));
     }
 
+    @PostMapping("/direct")
+    public ResponseEntity<ChatResponse> getOrCreateDirect(@Valid @RequestBody ChatDirectRequest request){
+        log.info("Called getOrCreateDirect with BODY = {}", request);
+        return ResponseEntity.ok(chatService.getOrCreateDirectChat(request));
+    }
+
     @PatchMapping("/update/{id}")
-    public ResponseEntity<ChatResponse> update(@PathVariable("id") Long id, @NotBlank String name) {
-        log.info("Called update with id = {}, name = {}", id, name);
-        return ResponseEntity.ok(chatService.update(id, name));
+    public ResponseEntity<ChatResponse> update(@PathVariable("id") Long id, @RequestBody ChatUpdateRequest request) {
+        log.info("Called update with REQUEST = {}", request);
+        return ResponseEntity.ok(chatService.update(id, request));
+    }
+
+    @PostMapping("/upload-photo")
+    public ResponseEntity<Map<String, String>> uploadPhoto(@RequestParam("file") MultipartFile file) {
+        String url = photoStorageService.uploadPhoto(file);
+        return ResponseEntity.ok(Map.of("url", url));
     }
 
     @DeleteMapping("/delete/{id}")

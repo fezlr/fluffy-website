@@ -250,3 +250,25 @@
 .bio-icon {
     font-size: 15px;
 }
+
+.action-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-message {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: #111827;
+    color: white;
+    transition: 0.2s;
+}
+
+.btn-message:hover {
+    background: #1f2937;
+}

@@ -28,7 +28,7 @@ public class SpringConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/favicon.ico").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/register/**", "/reset-password/**", "/reset-password-send-link/**", "/reset-password-complete/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/messages/**", "/register/**", "/reset-password/**", "/reset-password-send-link/**", "/reset-password-complete/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth -> oauth
                         .loginPage("/login")

@@ -7,6 +7,8 @@ public record ChatResponse(
 
         String name,
 
+        String photoUrl,
+
         Long userOneId,
 
         Long userTwoId,
