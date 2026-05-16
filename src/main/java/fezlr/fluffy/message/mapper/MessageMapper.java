@@ -10,6 +10,8 @@ public class MessageMapper {
         return new MessageResponse(
                 entity.getChat().getId(),
                 entity.getUser().getId(),
+                entity.getUser().getUsername(),
+                entity.getUser().getProfile().getMainPhotoUrl(),
                 entity.getText(),
                 entity.getCreatedAt()
         );

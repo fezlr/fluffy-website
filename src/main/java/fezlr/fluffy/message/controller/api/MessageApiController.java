@@ -11,12 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/messages")
 public class MessageApiController {
     private final MessageService messageService;
+
+    @GetMapping("/chat/{chatId}")
+    public ResponseEntity<List<MessageResponse>> getByChatId(@PathVariable Long chatId) {
+        return ResponseEntity.ok(messageService.getByChatId(chatId));
+    }
 
     @PostMapping("/create")
     public ResponseEntity<MessageResponse> create(@Valid @RequestBody MessageRequest request) {

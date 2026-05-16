@@ -27,15 +27,14 @@ public class ProfileConfig implements WebMvcConfigurer {
                         "/images/**",
                         "/js/**",
                         "/static/favicon.ico",
-                        "/api/v1/auth/**",
                         "/login/**",
                         "/register/**",
                         "/reset-password/**",
                         "/reset-password-send-link/**",
                         "/reset-password-complete/**",
                         "/profile/setup/**",
-                        "/api/v1/profile/edit/**",
-                        "/confirm-email"
+                        "/confirm-email",
+                        "/api/v1/**"
                 );
     }
 }

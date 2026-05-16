@@ -18,6 +18,7 @@
 
         <div class="profile-cover">
             <div class="cover-img"></div>
+
             <div class="profile-avatar-wrap">
                 <img class="profile-avatar"
                      th:src="${profile.mainPhotoUrl != null ? profile.mainPhotoUrl : '/images/default-avatar.png'}"
@@ -26,51 +27,75 @@
         </div>
 
         <div class="profile-info">
+
             <div class="profile-name-row">
+
                 <div>
                     <h1 class="profile-name"
-                        th:text="${profile.firstName + ' ' + profile.lastName}"></h1>
+                        th:text="${profile.firstName + ' ' + profile.lastName}">
+                    </h1>
+
                     <span class="profile-username"
-                          th:text="'@' + ${user.username}"></span>
+                          th:text="'@' + ${user.username}">
+                    </span>
                 </div>
 
                 <div class="profile-actions">
+
                     <button th:if="${isOwnProfile}"
                             class="btn-edit"
                             onclick="window.location.href='/profile/settings'">
                         Edit profile
                     </button>
 
-                    <button th:unless="${isOwnProfile}"
-                            class="btn-friend"
-                            th:classappend="${isFriend} ? ' friend' : (${hasPendingRequest} ? ' pending' : '')"
-                            id="friend-btn"
-                            th:data-id="${user.id}"
-                            th:text="${isFriend} ? 'Friends' : (${hasPendingRequest} ? 'Pending' : 'Add a friend')">
-                    </button>
+                    <div th:unless="${isOwnProfile}" class="action-group">
+
+                        <button class="btn-message"
+                                th:onclick="'startChat(' + ${user.id} + ')'">
+                            Message
+                        </button>
+
+                        <button class="btn-friend"
+                                id="friend-btn"
+                                th:data-id="${user.id}"
+                                th:classappend="${isFriend} ? ' friend' : (${hasPendingRequest} ? ' pending' : '')"
+                                th:text="${isFriend} ? 'Friends' : (${hasPendingRequest} ? 'Pending' : 'Add a friend')">
+                        </button>
+
+                    </div>
+
                 </div>
+
             </div>
 
+            <div class="profile-bio"
+                 th:if="${profile.aboutMe != null or profile.city != null or profile.birthDate != null or profile.gender != null}">
 
-
-            <div class="profile-bio" th:if="${profile.aboutMe != null or profile.city != null or profile.birthDate != null or profile.gender != null}">
-                <p class="bio-text" th:if="${profile.aboutMe != null}" th:text="${profile.aboutMe}"></p>
+                <p class="bio-text"
+                   th:if="${profile.aboutMe != null}"
+                   th:text="${profile.aboutMe}">
+                </p>
 
                 <div class="bio-meta">
-        <span class="bio-item" th:if="${profile.city != null}">
-            <span class="bio-icon"></span>
-            <span th:text="${profile.city}"></span>
-        </span>
+
+                    <span class="bio-item" th:if="${profile.city != null}">
+                        <span th:text="${profile.city}"></span>
+                    </span>
+
                     <span class="bio-item" th:if="${profile.birthDate != null}">
-            <span class="bio-icon"></span>
-            <span th:text="${#temporals.format(profile.birthDate, 'dd MMM yyyy')}"></span>
-        </span>
+                        <span th:text="${#temporals.format(profile.birthDate, 'dd MMM yyyy')}"></span>
+                    </span>
+
                     <span class="bio-item" th:if="${profile.gender != null}">
-            <span th:text="${profile.gender.name() == 'MALE' ? 'Male' : 'Female'}"></span>
-        </span>
+                        <span th:text="${profile.gender.name() == 'MALE' ? 'Male' : 'Female'}"></span>
+                    </span>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
 </th:block>

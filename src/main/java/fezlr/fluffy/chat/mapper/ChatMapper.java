@@ -10,6 +10,7 @@ public class ChatMapper {
         return new ChatResponse(
                 entity.getId(),
                 entity.getName(),
+                entity.getPhotoUrl(),
                 entity.getUserOne().getId(),
                 entity.getUserTwo().getId(),
                 entity.getCreatedAt()

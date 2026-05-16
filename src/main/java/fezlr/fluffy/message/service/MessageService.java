@@ -15,10 +15,11 @@ import fezlr.fluffy.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -83,5 +84,12 @@ public class MessageService {
     public MessageDeleteResponse delete(Long id) {
         messageRepository.deleteById(id);
         return new MessageDeleteResponse(id, "Message has been successfully deleted");
+    }
+
+    public List<MessageResponse> getByChatId(Long chatId) {
+        return messageRepository.findByChatId(chatId)
+                .stream()
+                .map(messageMapper::toResponse)
+                .toList();
     }
 }

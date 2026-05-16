@@ -50,3 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+async function startChat(targetUserId) {
+    const csrf = document.querySelector('meta[name="_csrf"]').content;
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+    const res = await fetch('/api/v1/chats/direct', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrf
+        },
+        body: JSON.stringify({ userId: targetUserId })
+    });
+
+    if (!res.ok) return;
+
+    const chat = await res.json();
+    window.location.href = '/profile/chats?open=' + chat.id;
+}

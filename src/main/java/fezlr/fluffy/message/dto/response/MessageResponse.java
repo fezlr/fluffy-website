@@ -12,6 +12,11 @@ public record MessageResponse(
         Long userId,
 
         @NotNull
+        String userName,
+
+        String userMainPhotoUrl,
+
+        @NotNull
         String text,
 
         @NotNull
