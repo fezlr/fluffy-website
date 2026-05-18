@@ -30,11 +30,12 @@ public class FeedPageController {
     public String feedPage(@PageableDefault(size = 20) Pageable pageable, Model model) {
         UserEntity user = customAuthService.getCurrentUser();
         Page<ProfilePotentialFriendsResponse> potentialFriends = profileService.findPotentialFriends(user.getProfile().getId(), pageable);
-        model.addAttribute("potentialFriends", potentialFriends);
 
+        model.addAttribute("potentialFriends", potentialFriends);
         model.addAttribute("feed", Math.random());
         model.addAttribute("feedSize", FeedConstants.SIZE);
         model.addAttribute("user", user);
+
         return "feed/home";
     }
 }

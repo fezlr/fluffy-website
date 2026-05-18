@@ -18,7 +18,6 @@ public class ChatPageController {
 
     @GetMapping
     public String profileChats(Model model, @RequestParam(required = false) Long openChatId) {
-
         model.addAttribute("profile", customAuthService.getCurrentUser().getProfile());
         model.addAttribute("chats", chatApiController.allChatsByCurrentUser().getBody());
         model.addAttribute("openChatId", openChatId);

@@ -1,7 +1,6 @@
 package fezlr.fluffy.profile.service;
 
 import fezlr.fluffy.common.service.CustomAuthService;
-import fezlr.fluffy.feed.dto.response.FeedResponse;
 import fezlr.fluffy.profile.dto.request.ProfileRequest;
 import fezlr.fluffy.profile.dto.response.ProfilePotentialFriendsResponse;
 import fezlr.fluffy.profile.dto.response.ProfileResponse;
@@ -12,7 +11,6 @@ import fezlr.fluffy.profile.repository.ProfileRepository;
 import fezlr.fluffy.user.entity.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
@@ -44,8 +41,6 @@ public class ProfileService {
 
     @Transactional
     public ProfileResponse edit(ProfileRequest request) {
-        log.info("Called edit with BODY = {}", request);
-
         boolean changed = false;
         ProfileEntity profileEntity = customAuthService.getCurrentUser().getProfile();
 
@@ -113,7 +108,6 @@ public class ProfileService {
     }
 
     public Page<ProfilePotentialFriendsResponse> findPotentialFriends(Long id, Pageable pageable) {
-        log.info("Called findPotentialFriends with ID = {}, PAGEABLE = {}", id, pageable);
         return profileRepository.findPotentialFriends(id, pageable)
                 .map(profilePotentialFriendsMapper::toResponse);
     }

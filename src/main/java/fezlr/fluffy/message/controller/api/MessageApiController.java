@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/messages")
@@ -27,19 +26,16 @@ public class MessageApiController {
 
     @PostMapping("/create")
     public ResponseEntity<MessageResponse> create(@Valid @RequestBody MessageRequest request) {
-        log.info("Called create with REQUEST = {}", request);
         return ResponseEntity.ok(messageService.create(request));
     }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<MessageResponse> update(@PathVariable("id") Long id, @NotBlank String text) {
-        log.info("Called update with ID = {}, TEXT = {}", id, text);
         return ResponseEntity.ok(messageService.update(id, text));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<MessageDeleteResponse> delete(@PathVariable("id") Long id) {
-        log.info("Called delete with ID = {}", id);
-        return ResponseEntity.ok(messageService.delete(id));
+       return ResponseEntity.ok(messageService.delete(id));
     }
 }

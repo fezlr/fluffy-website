@@ -14,12 +14,10 @@ import fezlr.fluffy.user.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ChatService {
@@ -87,8 +85,6 @@ public class ChatService {
     }
 
     public ChatResponse getOrCreateDirectChat(ChatDirectRequest request) {
-
-        log.info("REQUEST = {}", request);
         //get currentUserId
         Long currentUserId = customAuthService.getCurrentUser().getId();
 

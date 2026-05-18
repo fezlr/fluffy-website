@@ -9,7 +9,6 @@ import fezlr.fluffy.feed.repository.FeedRepository;
 import fezlr.fluffy.photo.service.PhotoStorageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FeedService {
@@ -54,7 +52,6 @@ public class FeedService {
 
     @Transactional
     public FeedResponse update(Long id, String text, MultipartFile photo, boolean removePhoto) {
-        log.info("Called update with ID = {}, TEXT = {}, PHOTO = {}, REMOVEPHOTO = {}", id, text, photo, removePhoto);
         boolean isChanged = false;
         var feed = feedRepository
                 .findById(id)

@@ -29,7 +29,7 @@ public class MailService {
             message.setSubject(mailPropertiesMessages.codeSubjectMessage());
             message.setText(mailPropertiesMessages.codeMessage().formatted(token));
             mailSender.send(message);
-        } catch(MailException e) {
+        } catch (MailException e) {
             log.error("Failed to send confirmation code to = {}: {}", to, e.getMessage());
         }
     }
@@ -43,7 +43,7 @@ public class MailService {
             message.setSubject(linkSubject);
             message.setText(linkMessage.formatted(commonProperties.baseURL(), token));
             mailSender.send(message);
-        } catch(MailException e) {
+        } catch (MailException e) {
             log.error("Failed to send confirmation link to = {}: {}", to, e.getMessage());
         }
     }

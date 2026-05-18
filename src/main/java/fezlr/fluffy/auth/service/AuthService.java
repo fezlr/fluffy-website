@@ -51,17 +51,14 @@ public class AuthService {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
-        //create
         UserRequest userRequest = userService.createRequest(request);
         UserEntity userEntity = userService.create(userRequest);
         ProfileEntity profileEntity = profileService.create(userEntity);
 
-        //set
         userEntity.setProfile(profileEntity);
 
         TokenEntity tokenEntity = tokenService.createCode(userEntity, TokenType.CREATE_USER);
 
-        //save
         userService.save(userEntity);
         tokenService.save(tokenEntity);
 
@@ -82,6 +79,7 @@ public class AuthService {
         TokenEntity tokenEntity = tokenService.createLink(entity, TokenType.RESET_PASSWORD);
         tokenService.deactivateAllByUserAndTokenType(entity, TokenType.RESET_PASSWORD);
         tokenService.save(tokenEntity);
+
         mailService.sendLink(request.email(), tokenEntity.getToken(), mailPropertiesMessages.linkSubjectMessage(), mailPropertiesMessages.linkMessage());
         return new AuthResponse(authPropertiesMessages.resetSent());
     }
@@ -114,8 +112,10 @@ public class AuthService {
         }
 
         userService.changePassword(userEntity, request.newPassword());
+
         tokenService.deactivate(tokenEntity);
         tokenService.confirm(tokenEntity);
+
         tokenService.save(tokenEntity);
         userService.save(userEntity);
         return new AuthResponse(authPropertiesMessages.resetDone());
@@ -123,12 +123,10 @@ public class AuthService {
 
     @Transactional
     public AuthResponse validateCodeToken(CodeTokenRequest request) {
-        //find email by uuid
         TokenEntity token = tokenRepository
                 .findByTokenWithUser(request.token())
-                .orElseThrow(() -> new EntityNotFoundException("Token not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Token is not found"));
 
-        //TODO: refactor(optimize)
         TokenEntity tokenEntity = tokenService.validate(request.token(), token.getUser().getEmail());
 
         if(!tokenEntity.getCode().equals(request.code())) {
@@ -141,11 +139,12 @@ public class AuthService {
 
         UserEntity userEntity = userService.getByToken(tokenEntity);
         userEntity.setEnabled(true);
+
         tokenService.deactivate(tokenEntity);
         tokenService.confirm(tokenEntity);
+
         tokenService.save(tokenEntity);
         userService.save(userEntity);
-
         return new AuthResponse(authPropertiesMessages.codeConfirmed());
     }
 
@@ -170,8 +169,11 @@ public class AuthService {
         }
 
         TokenEntity token = tokenService.createLink(user, TokenType.EMAIL_VERIFICATION);
+
         token.setNewEmail(newEmail);
+
         mailService.sendLink(newEmail, token.getToken(), "Email verification", mailPropertiesMessages.resetEmailMessage());
+
         tokenService.save(token);
 
         return new AuthResponse(authPropertiesMessages.resetEmail());
@@ -184,6 +186,7 @@ public class AuthService {
         UserEntity user = userService.getByToken(token);
 
         user.setEmail(token.getNewEmail());
+
         tokenService.deactivate(token);
         tokenService.confirm(token);
         tokenService.save(token);

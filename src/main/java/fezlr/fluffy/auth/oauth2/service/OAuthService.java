@@ -6,6 +6,7 @@ import fezlr.fluffy.profile.service.ProfileService;
 import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.enums.Role;
 import fezlr.fluffy.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -44,6 +45,7 @@ public class OAuthService extends DefaultOAuth2UserService {
         return oAuth2User;
     }
 
+    @Transactional
     private void registerUserAndProfile(String email, String name) {
         var user = UserEntity.builder()
                 .email(email)
