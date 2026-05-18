@@ -4,7 +4,6 @@ import fezlr.fluffy.common.constant.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-//TODO: instead of UserRequest in AuthController save?
 public record RegisterRequest(
         @NotBlank
         String email,

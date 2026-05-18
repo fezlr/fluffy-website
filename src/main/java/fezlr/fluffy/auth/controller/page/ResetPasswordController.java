@@ -2,12 +2,10 @@ package fezlr.fluffy.auth.controller.page;
 
 import fezlr.fluffy.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ResetPasswordController {
@@ -16,7 +14,6 @@ public class ResetPasswordController {
     //when entering the page and getting token
     @GetMapping("/reset-password")
     public String validateResetPasswordToken(@RequestParam String token) {
-        log.info("Called validateResetPasswordToken with BODY = {}", token);
         authService.validateResetPasswordToken(token);
         return "auth/reset-password";
     }

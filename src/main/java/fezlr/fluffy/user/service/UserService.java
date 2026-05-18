@@ -12,14 +12,12 @@ import fezlr.fluffy.user.enums.Role;
 import fezlr.fluffy.user.mapper.UserUpdateMapper;
 import fezlr.fluffy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -30,7 +28,6 @@ public class UserService {
 
     @Transactional
     public UserEntity create(UserRequest userRequest) {
-        log.info("Called create with BODY = {}", userRequest);
         var userEntity = UserEntity
                 .builder()
                 .username(userRequest.username())
@@ -74,13 +71,6 @@ public class UserService {
     }
 
     public UserUpdateResponse update(UserUpdateRequest request) {
-        //1. validate if unique
-        //2. validate if changed
-
-        //2. correct format of email if changing
-        //3. change
-        //4. save
-
         boolean isChanged = false;
         UserEntity entity = customAuthService.getCurrentUser();
 
@@ -89,17 +79,13 @@ public class UserService {
                     !Objects.equals(request.username(), entity.getUsername()) &&
                         !userRepository.existsByUsername(request.username())) {
             isChanged = true;
-            log.info("Username changed");
             entity.setUsername(request.username());
         }
 
-        //check if changed or not
         if (isChanged) {
-            log.info("Changed");
             return userUpdateMapper.toResponse(userRepository.save(entity));
         }
 
-        log.info("Nothing changed");
         return userUpdateMapper.toResponse(entity);
     }
 }

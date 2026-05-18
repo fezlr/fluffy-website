@@ -12,7 +12,7 @@ public record MessageResponse(
         Long userId,
 
         @NotNull
-        String userName,
+        String username,
 
         String userMainPhotoUrl,
 

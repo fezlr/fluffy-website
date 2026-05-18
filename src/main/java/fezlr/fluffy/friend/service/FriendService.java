@@ -8,15 +8,12 @@ import fezlr.fluffy.friend.repository.FriendRepository;
 import fezlr.fluffy.user.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FriendService {
@@ -24,7 +21,6 @@ public class FriendService {
     private final FriendMapper friendMapper;
 
     public Page<FriendResponse> findFriends(Long userId, Pageable pageable) {
-        log.info("Called findFriends with ID = {}, PAGE = {}", userId, pageable);
         return friendRepository
                 .findFriends(userId, pageable)
                 .map(friendMapper::toResponse);
@@ -32,7 +28,6 @@ public class FriendService {
 
     @Transactional
     public void createFriendship(UserEntity senderEntity, UserEntity receiverEntity) {
-        log.info("Create friendship");
         if (friendRepository.existsByUserAndFriend(senderEntity, receiverEntity)) {
             throw new IllegalStateException("Friendship already exists");
         }
@@ -50,7 +45,6 @@ public class FriendService {
                 .createdAt(time)
                 .build();
 
-        log.info("save senderToSave = {}, receiverToSave = {}", senderToSave, receiverToSave);
         friendRepository.save(senderToSave);
         friendRepository.save(receiverToSave);
     }
@@ -68,7 +62,6 @@ public class FriendService {
 
     @Transactional
     public DeleteResponse deleteFriendship(Long senderId, Long receiverId) {
-        log.info("Called deleteFriendship with senderId = {}, receiverId = {}", senderId, receiverId);
         if (senderId.equals(receiverId)) {
             throw new IllegalStateException("Cannot delete friendship with yourself");
         }

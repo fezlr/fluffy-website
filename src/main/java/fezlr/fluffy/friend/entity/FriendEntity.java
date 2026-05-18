@@ -21,7 +21,6 @@ public class FriendEntity {
     @Column(name = "id")
     private Long id;
 
-    //to get profile id - getUser().getProfile().getId()
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;

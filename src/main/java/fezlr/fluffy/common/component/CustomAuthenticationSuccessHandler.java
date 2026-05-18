@@ -23,16 +23,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserEntity user = resolveUser(authentication);
 
-        if(user.getProfile() == null || !user.getProfile().isComplete()) {
+        if (user.getProfile() == null || !user.getProfile().isComplete()) {
             response.sendRedirect("/profile/setup");
         } else {
             response.sendRedirect("/home");
         }
     }
 
-    //find whether oauth2 or custom login or not
+    //find whether oauth2 or custom login
     private UserEntity resolveUser(Authentication authentication) {
-        if(authentication instanceof OAuth2AuthenticationToken oAuth2) {
+        if (authentication instanceof OAuth2AuthenticationToken oAuth2) {
             String email = oAuth2.getPrincipal().getAttribute("email");
             return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email is not found"));
         } else {

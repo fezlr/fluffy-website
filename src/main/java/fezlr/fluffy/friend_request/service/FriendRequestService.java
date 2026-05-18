@@ -8,11 +8,9 @@ import fezlr.fluffy.friend_request.entity.FriendRequestEntity;
 import fezlr.fluffy.friend_request.mapper.FriendRequestInfoMapper;
 import fezlr.fluffy.friend_request.mapper.FriendRequestMapper;
 import fezlr.fluffy.friend_request.repository.FriendRequestRepository;
-import fezlr.fluffy.user.entity.UserEntity;
 import fezlr.fluffy.user.repository.UserRepository;
 import fezlr.fluffy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FriendRequestService {
@@ -33,7 +30,6 @@ public class FriendRequestService {
 
     @Transactional
     public CreateFriendResponse createFriendRequest(Long senderId, Long receiverId) {
-        log.info("Called createFriendRequest with SENDERID = {}, RECEIVERID = {}", senderId, receiverId);
         if(receiverId.equals(senderId)) {
             throw new IllegalArgumentException("Cannot send a friend request to yourself");
         }
@@ -42,7 +38,6 @@ public class FriendRequestService {
         boolean mutualExists = friendRequestRepository.existsBySenderIdAndReceiverId(receiverId, senderId);
 
         if(mutualExists) {
-            log.info("mutualExists");
             var senderIdToSave = userRepository.findById(senderId).orElseThrow(() -> new IllegalArgumentException("Sender user is not found"));
             var receiverIdToSave = userRepository.findById(receiverId).orElseThrow(() -> new IllegalArgumentException("Receiver user is not found"));
 
@@ -82,7 +77,6 @@ public class FriendRequestService {
         var senderIdToSave = userRepository.findById(senderId).orElseThrow(() -> new IllegalArgumentException("Sender user is not found"));
         var receiverIdToSave = userRepository.findById(receiverId).orElseThrow(() -> new IllegalArgumentException("Receiver user is not found"));
 
-        log.info("deleting user with senderId = {}, receiverId = {}", senderId, receiverId);
         friendService.delete(senderIdToSave, receiverIdToSave);
 
         return new DeleteFriendResponse(

@@ -1,14 +1,11 @@
 package fezlr.fluffy.token.service;
 
-import fezlr.fluffy.token.dto.response.TokenResponse;
 import fezlr.fluffy.token.entity.TokenEntity;
 import fezlr.fluffy.token.enums.TokenType;
-import fezlr.fluffy.token.mapper.TokenMapper;
 import fezlr.fluffy.token.repository.TokenRepository;
 import fezlr.fluffy.user.entity.UserEntity;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +14,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TokenService {
@@ -27,7 +23,6 @@ public class TokenService {
 
     @Transactional
     public TokenEntity createCode(UserEntity userEntity, TokenType tokenType) {
-        log.info("Called saveCode with BODY = {}", userEntity);
         String tokenCode = String.format("%06d", new SecureRandom().nextInt(999999));
         var tokenEntity = TokenEntity
                 .builder()
@@ -36,14 +31,13 @@ public class TokenService {
                 .createdAt(LocalDateTime.now())
                 .expiresAt(LocalDateTime.now().plusMinutes(expiredPlusMinutes))
                 .user(userEntity)
-                .tokenType(TokenType.CREATE_USER)
+                .tokenType(tokenType)
                 .build();
         return tokenEntity;
     }
 
     public TokenEntity createLink(UserEntity userEntity, TokenType tokenType) {
-        log.info("Called createLink with BODY = {}", userEntity);
-        var tokenEntity = TokenEntity
+       var tokenEntity = TokenEntity
                 .builder()
                 .token(UUID.randomUUID().toString())
                 .createdAt(LocalDateTime.now())
