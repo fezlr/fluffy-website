@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class TokenService {
-    @Value("${spring.token.expired-time-minutes}")
+    @Value("${app.token.expired-time-minutes}")
     private Long expiredPlusMinutes;
     private final TokenRepository tokenRepository;
 

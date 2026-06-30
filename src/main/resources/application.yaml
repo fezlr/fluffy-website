@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: fluffy
   security:
     oauth2:
       client:
@@ -6,16 +8,7 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            scope:
-              - email
-              - profile
-  application:
-    name: fluffy
-    base-url: http://localhost:8080
-  cloudinary:
-    cloud-name: ${CLOUD_NAME}
-    api-key: ${API_KEY}
-    api-secret: ${API_SECRET}
+            scope: [email, profile]
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -27,31 +20,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: ${DB_USER}
     password: ${DB_PASSWORD}
-  server:
-    servlet:
-      session:
-        timeout: 15m
-  token:
-    expired-time-minutes: ${TOKEN_EXPIRED_TIME_MINUTES}
   mail:
     name: "Fluffy"
     host: smtp.gmail.com
     port: 587
     username: ${EMAIL_ADDRESS}
     password: ${EMAIL_PASSWORD}
-    messages:
-      reset-email-message:  |
-        Verify your email:
-        %s/confirm-email?token=%s
-      code-subject-message: "Confirm your email"
-      code-message: |
-        Thank you for registration. 
-        Your code:
-        %s
-      link-subject-message: "Reset your password"
-      link-message: |
-        Reset your password:
-        %s/reset-password?token=%s
     properties:
       mail:
         smtp:
@@ -59,12 +33,48 @@ spring:
           starttls:
             enable: true
             required: true
-  auth:
-    messages:
-      reset-email: "A confirmation link has been sent to your old email address. It expires in 15 minutes - do not share it."
-      code-sent: "A confirmation code has been sent. It expires in 15 minutes — do not share it."
-      code-confirmed: "Your account has been successfully activated."
-      reset-sent: "A confirmation link has been sent. It expires in 15 minutes — do not share it."
-      reset-done: "Your password has been successfully changed."
-      reset-allowed: "You can now change your password."
-      allowed: "Valuable validate"
+
+server:
+  servlet:
+    session:
+      timeout: 15m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  metrics:
+    tags:
+      application: fluffy
+
+app:
+  name: fluffy
+  base-url: http://localhost:8080
+  cloudinary:
+    cloud-name: ${CLOUD_NAME}
+    api-key: ${API_KEY}
+    api-secret: ${API_SECRET}
+  token:
+    expired-time-minutes: ${TOKEN_EXPIRED_TIME_MINUTES}
+  mail-messages:
+    reset-email-message: |
+      Verify your email:
+      %s/confirm-email?token=%s
+    code-subject-message: "Confirm your email"
+    code-message: |
+      Thank you for registration.
+      Your code:
+      %s
+    link-subject-message: "Reset your password"
+    link-message: |
+      Reset your password:
+      %s/reset-password?token=%s
+  auth-messages:
+    reset-email: "A confirmation link has been sent to your old email address. It expires in 15 minutes - do not share it."
+    code-sent: "A confirmation code has been sent. It expires in 15 minutes — do not share it."
+    code-confirmed: "Your account has been successfully activated."
+    reset-sent: "A confirmation link has been sent. It expires in 15 minutes — do not share it."
+    reset-done: "Your password has been successfully changed."
+    reset-allowed: "You can now change your password."
+    allowed: "Valuable validate"
