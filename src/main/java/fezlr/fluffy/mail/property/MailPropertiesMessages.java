@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties("spring.mail.messages")
+@ConfigurationProperties("app.mail-messages")
 public record MailPropertiesMessages(
         @NotBlank String codeSubjectMessage,
         @NotBlank String linkSubjectMessage,

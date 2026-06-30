@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties("spring.cloudinary")
+@ConfigurationProperties("app.cloudinary")
 public record CloudinaryProperties(
         @NotBlank
         String cloudName,
