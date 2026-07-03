@@ -23,12 +23,11 @@ This project includes:
 - Authentication with token-based security
 - Password reset via email link
 - Account activation via verification code
+- “People you may know” recommendation system
+- Social feed (posts with images and text)
 - User profile management
 - Friend request system
 - Automatic friendship creation on mutual requests
-- Prometheus, Grafana and Swagger
-- Email notification system
-- CI/CD (GitHub Actions)
 
 ---
 
@@ -124,6 +123,17 @@ A user profile contains:
 Profiles can be updated after authentication.
 
 <img width="766" height="414" alt="image" src="https://github.com/user-attachments/assets/048bc096-e83e-4406-89ef-75bd1d4aa73d" />
+
+---
+
+## Cloudinary Integration
+
+Used for:
+
+- Profile images
+- Media storage in feed
+
+All uploads are stored in cloud storage.
 
 ---
 
