@@ -60,12 +60,6 @@ The project follows a layered architecture:
 - dto — request/response models
 - mapper — object mapping layer
 
-### Approximate visualization
-
-<img width="1226" height="314" alt="image" src="https://github.com/user-attachments/assets/bfaeed8b-476f-44ed-a36c-05ee9fd694d3" />
-
----
-
 ## Authentication Flow
 
 The system uses token-based authentication and email verification.
